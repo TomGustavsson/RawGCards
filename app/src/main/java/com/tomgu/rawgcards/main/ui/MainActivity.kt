@@ -3,6 +3,9 @@ package com.tomgu.rawgcards.main.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.main.CardStackAdapter
 import com.tomgu.rawgcards.main.MainViewModel
@@ -15,13 +18,40 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     private var card_stack: CardStack? = null
     private var card_adapter: CardStackAdapter? = null
 
+    lateinit var favouritesFragment : GameListFragment
+
     private lateinit var viewModel: MainViewModel
+
+    var cardIndex : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom)
+        val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
+        favouritesFragment = GameListFragment()
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+
+            when(it.itemId){
+                R.id.home -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .remove(favouritesFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit()
+                }
+                R.id.favourites -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.frame_layout, favouritesFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit()
+                }
+
+            }
+            true
+        }
 
         card_adapter = CardStackAdapter(applicationContext, 0)
 
@@ -32,7 +62,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
         card_stack!!.setListener(this)
 
-        viewModel = MainViewModel()
+        viewModel = MainViewModel(application)
         viewModel.getApiItems()
 
         viewModel.getLiveData().observe(this, Observer {
@@ -46,9 +76,10 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     override fun swipeEnd(i: Int, v: Float): Boolean {
 
         if (i == 1 || i == 3){
-            //Save game in room database
+            viewModel.setSaveGameList(card_adapter!!.getItem(cardIndex))
+            cardIndex ++
         } else {
-            //remove from room database
+            cardIndex ++
         }
 
         return v > 300

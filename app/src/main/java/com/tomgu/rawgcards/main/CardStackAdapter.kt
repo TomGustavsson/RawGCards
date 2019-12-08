@@ -22,7 +22,7 @@ class CardStackAdapter(context: Context, resource: Int) : ArrayAdapter<Game>(con
 
         titleTextView.setText(game.name)
         ratingTextView.setText(game.rating)
-        Picasso.get().load(game.background_image).into(imageView);
+        Picasso.get().load(game.background_image).into(imageView)
 
         return convertView
     }
