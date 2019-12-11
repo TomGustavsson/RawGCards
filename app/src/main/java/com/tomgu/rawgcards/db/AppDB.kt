@@ -11,17 +11,4 @@ abstract class AppDB: RoomDatabase() {
 
     abstract fun gameDao() : GameDao
 
-    companion object{
-        private var INSTANCE: AppDB? = null
-        fun getInstance(context: Context): AppDB{
-            if (INSTANCE == null){
-                INSTANCE = Room.databaseBuilder(
-                    context,
-                    AppDB::class.java,
-                    "roomdb")
-                    .build()
-            }
-            return INSTANCE as AppDB
-        }
-    }
 }

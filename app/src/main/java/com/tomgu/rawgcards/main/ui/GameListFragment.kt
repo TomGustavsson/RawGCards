@@ -2,17 +2,20 @@ package com.tomgu.rawgcards.main.ui
 
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tomgu.rawgcards.AppApplication
 
 import com.tomgu.rawgcards.R
-import com.tomgu.rawgcards.main.MainViewModel
 import com.tomgu.rawgcards.main.RecyclerAdapter
-import com.tomgu.rawgcards.main.api.Game
 import kotlinx.android.synthetic.main.fragment_game_list.*
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
@@ -20,7 +23,11 @@ import kotlinx.android.synthetic.main.fragment_game_list.*
 class GameListFragment : Fragment() {
 
     private lateinit var recyclerAdapter: RecyclerAdapter
-    private lateinit var viewModel : MainViewModel
+
+    @Inject
+    lateinit var vmFactory : MainViewModel.MainViewModelFactory
+
+    lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,18 +36,23 @@ class GameListFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_game_list, container, false)
     }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        var gameList = mutableListOf<Game>()
-        var cod = Game("cod", "Call of Duty", "4.5", "https://i.pinimg.com/originals/83/1a/23/831a23859314f537d8da00ab11ec1345.jpg")
 
-        gameList.add(cod)
+        //Dagger2 Skit
+        (activity?.applicationContext as AppApplication).appComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
+
         initRecyclerView()
+        viewModel.getRoomItems()
 
-        recyclerAdapter.submitGamesList(gameList)
-        recyclerAdapter.notifyDataSetChanged()
+        viewModel.getLiveDataRoom().observe(this, Observer {
+            Log.d("blabla", it.toString())
+            recyclerAdapter.submitGamesList(it)
+            recyclerAdapter.notifyDataSetChanged()
+        })
+
     }
 
     private fun initRecyclerView(){
@@ -48,6 +60,7 @@ class GameListFragment : Fragment() {
         recyclerAdapter = RecyclerAdapter()
         game_list_recyclerview.adapter = recyclerAdapter
     }
+
 
 
 }

@@ -1,8 +1,10 @@
 package com.tomgu.rawgcards.db
 
+import android.database.Observable
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.tomgu.rawgcards.main.api.Game
+import io.reactivex.Flowable
 
 @Dao
 interface GameDao {
@@ -11,7 +13,7 @@ interface GameDao {
     fun saveGame(ge: Game)
 
     @Query("select * from Game")
-    fun readGame() : LiveData<List<Game>>
+    fun readGame() : Flowable<List<Game>>
 
     @Query("DELETE FROM Game")
     fun nuketable()

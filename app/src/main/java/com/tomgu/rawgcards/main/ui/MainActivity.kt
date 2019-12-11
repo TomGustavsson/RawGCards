@@ -3,15 +3,17 @@ package com.tomgu.rawgcards.main.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.main.CardStackAdapter
-import com.tomgu.rawgcards.main.MainViewModel
 import com.wenchao.cardstack.CardStack
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.tomgu.rawgcards.AppApplication
+import com.tomgu.rawgcards.AppComponent
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
@@ -20,13 +22,22 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
     lateinit var favouritesFragment : GameListFragment
 
-    private lateinit var viewModel: MainViewModel
+    @Inject
+    lateinit var vmFactory : MainViewModel.MainViewModelFactory
+
+    lateinit var viewModel: MainViewModel
 
     var cardIndex : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+        //Dagger2 skit
+        (applicationContext as AppApplication).appComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         favouritesFragment = GameListFragment()
@@ -62,7 +73,6 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
         card_stack!!.setListener(this)
 
-        viewModel = MainViewModel(application)
         viewModel.getApiItems()
 
         viewModel.getLiveData().observe(this, Observer {
@@ -100,4 +110,5 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     override fun topCardTapped() {
 
     }
+
 }
