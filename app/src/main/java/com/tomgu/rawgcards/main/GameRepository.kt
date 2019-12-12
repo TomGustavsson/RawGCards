@@ -22,10 +22,16 @@ class GameRepository(val gameAPI: GameAPI,
     }
 
     fun insert(game : Game){
-        Completable.fromAction({
+        Completable.fromAction{
             gameDao.saveGame(game)
-        })
-            .subscribeOn(Schedulers.io())
+            }.subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
+    fun delete(game: Game){
+        Completable.fromAction{
+            gameDao.delete(game)
+        }.subscribeOn(Schedulers.io())
             .subscribe()
     }
 

@@ -13,3 +13,6 @@ data class Game(@field:Json(name = "slug") @PrimaryKey @NonNull var slug: String
                 @field:Json(name = "name") @ColumnInfo(name = "GAME")val name: String,
                 @field:Json(name = "rating") @ColumnInfo(name = "RATING")val rating: String,
                 @field:Json(name = "background_image") @ColumnInfo(name = "BACKGROUND_IMAGE")val background_image: String)
+
+data class GameInfo(@field:Json(name = "description") var description: String,
+                    @field:Json(name = "background_image_additional") var background_image_additional: String)

@@ -1,7 +1,8 @@
-package com.tomgu.rawgcards
+package com.tomgu.rawgcards.di
 
 import android.content.Context
 import androidx.room.Room
+import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.db.AppDB
 import com.tomgu.rawgcards.db.GameDao
 import com.tomgu.rawgcards.main.GameRepository
@@ -20,14 +21,14 @@ class AppModule(private val applicationContext: Context){
 
     @Singleton
     @Provides
-    fun appApplication(): AppApplication{
+    fun appApplication(): AppApplication {
         return applicationContext as AppApplication
     }
 
     @Singleton
     @Provides
-    fun appViewModelCreator(appApplication: AppApplication): MainViewModel.MainViewModelFactory {
-        return MainViewModel.MainViewModelFactory(appApplication)
+    fun appViewModelCreator(appApplication: AppApplication): AppViewModelFactory {
+        return AppViewModelFactory(appApplication)
     }
 
     @Singleton

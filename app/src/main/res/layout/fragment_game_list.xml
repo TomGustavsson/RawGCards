@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:clickable="true"
-    tools:context=".main.ui.GameListFragment">
+    tools:context=".main.gamefragment.GameListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/game_list_recyclerview"

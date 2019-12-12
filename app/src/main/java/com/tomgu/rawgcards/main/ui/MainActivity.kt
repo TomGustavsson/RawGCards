@@ -8,11 +8,11 @@ import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.main.CardStackAdapter
 import com.wenchao.cardstack.CardStack
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.tomgu.rawgcards.AppApplication
-import com.tomgu.rawgcards.AppComponent
+import com.tomgu.rawgcards.AppViewModelFactory
+import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.gamefragment.GameListFragment
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     lateinit var favouritesFragment : GameListFragment
 
     @Inject
-    lateinit var vmFactory : MainViewModel.MainViewModelFactory
+    lateinit var vmFactory : AppViewModelFactory
 
     lateinit var viewModel: MainViewModel
 
@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
-        favouritesFragment = GameListFragment()
+        favouritesFragment =
+            GameListFragment()
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
 

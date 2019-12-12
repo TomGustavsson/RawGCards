@@ -1,7 +1,7 @@
-package com.tomgu.rawgcards
+package com.tomgu.rawgcards.di
 
 import android.app.Application
-import android.content.Context
+import com.tomgu.rawgcards.di.DaggerAppComponent
 
 class AppApplication : Application(){
 
@@ -10,10 +10,11 @@ class AppApplication : Application(){
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this)).build()
     }
 
-    fun appComponent(): AppComponent{
+    fun appComponent(): AppComponent {
         return appComponent
     }
 }
