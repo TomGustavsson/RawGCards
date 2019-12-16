@@ -3,6 +3,8 @@ package com.tomgu.rawgcards.main.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.CompoundButton
+import android.widget.Switch
 import androidx.fragment.app.FragmentTransaction
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.main.CardStackAdapter
@@ -12,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.categoriedialog.Categorie
+import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
 import javax.inject.Inject
 
@@ -25,7 +29,10 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     @Inject
     lateinit var vmFactory : AppViewModelFactory
 
+    lateinit var switchCategories : Switch
     lateinit var viewModel: MainViewModel
+
+    lateinit var dialogCategories: DialogCategories
 
     var cardIndex : Int = 0
 
@@ -33,15 +40,26 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
         //Dagger2 skit
         (applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
-        favouritesFragment =
-            GameListFragment()
+        switchCategories = findViewById(R.id.switchCategories)
+        favouritesFragment = GameListFragment()
+        dialogCategories =
+            DialogCategories()
+
+        val com = object : CompoundButton.OnCheckedChangeListener{
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+                if(p1){
+                    dialogCategories.show(supportFragmentManager,"gameInfoDialog")
+                } else{
+                    Log.d("switcher", "Switch is disabled")
+                }
+            }
+        }
+        switchCategories.setOnCheckedChangeListener(com)
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
 
@@ -79,7 +97,6 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         viewModel.getLiveData().observe(this, Observer {
             for(game in it.games)
             card_adapter!!.add(game)
-            Log.d("tgiw", it.toString())
         })
 
     }
@@ -110,6 +127,14 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
     override fun topCardTapped() {
 
+    }
+
+    fun changeSwitch(categorie: Categorie){
+        switchCategories.toggle()
+        card_adapter!!.clear()
+        viewModel.setCategorieToApi(categorie.name)
+        viewModel.getApiItems()
+        card_stack!!.reset(true)
     }
 
 }

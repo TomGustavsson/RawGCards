@@ -1,6 +1,5 @@
-package com.tomgu.rawgcards.main
+package com.tomgu.rawgcards.main.gamefragment
 
-import android.net.sip.SipSession
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,11 @@ class RecyclerAdapter(val onClickListener: OnClickListener) : RecyclerView.Adapt
     var allGames : List<Game> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(
-            R.layout.game_list_item, parent, false
-        ), onClickListener)
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.game_list_item, parent, false
+            ), onClickListener
+        )
     }
 
     override fun getItemCount(): Int {

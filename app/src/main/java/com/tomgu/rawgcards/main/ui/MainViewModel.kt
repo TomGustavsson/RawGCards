@@ -22,6 +22,8 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
     lateinit var gameRepository: GameRepository
 
     private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
+    var categorie : String = "1"
+    var page : String = "1"
 
     override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
@@ -29,7 +31,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     fun getApiItems() {
 
-        disposables.add(gameRepository.getApi().getStoreObject()
+        disposables.add(gameRepository.getApi().getStoreObject(1,categorie,"1995-01-01,2019-12-31")
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -48,6 +50,17 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     fun setSaveGameList(game : Game){
             gameRepository.insert(game)
+    }
+
+    fun setCategorieToApi(ce: String){
+        when(ce){
+            "Racing" -> categorie = "1"
+            "Shooter" -> categorie = "2"
+            "Action" -> categorie = "4"
+            "RPG" -> categorie = "5"
+            "Fighting" -> categorie = "6"
+        }
+        Log.d("blabla", categorie)
     }
 
 }

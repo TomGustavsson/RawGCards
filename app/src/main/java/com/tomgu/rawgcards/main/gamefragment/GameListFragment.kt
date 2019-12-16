@@ -10,13 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.RecyclerAdapter
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.gamedialog.GameInfoDialog
 import kotlinx.android.synthetic.main.fragment_game_list.*
@@ -64,8 +62,9 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
 
     private fun initRecyclerView(){
         game_list_recyclerview.layoutManager = LinearLayoutManager(activity)
-        recyclerAdapter = RecyclerAdapter(this)
-        var itemTouch = ItemTouchHelper(itemTouchHelper).attachToRecyclerView(game_list_recyclerview)
+        recyclerAdapter =
+            RecyclerAdapter(this)
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(game_list_recyclerview)
         game_list_recyclerview.adapter = recyclerAdapter
     }
 
