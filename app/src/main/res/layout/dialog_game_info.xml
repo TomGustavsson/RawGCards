@@ -31,13 +31,14 @@
         android:id="@+id/infoTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/wallpoet"
+        android:padding="10dp"
         android:text="Title"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/diagonalLayout" />
 
@@ -45,13 +46,13 @@
         android:id="@+id/infoRatingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/wallpoet"
         android:text="Rating"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/infoTitleText" />
 
@@ -59,7 +60,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="407dp"
         android:layout_height="264dp"
-        android:padding="10dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/wallpoet"
+                android:padding="5dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_primary" />
         </LinearLayout>
@@ -97,15 +99,14 @@
 
     <ImageView
         android:id="@+id/extraInfoImage"
-        android:scaleType="centerCrop"
         android:layout_width="181dp"
         android:layout_height="102dp"
         android:layout_marginStart="48dp"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toTopOf="@+id/descriptionText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/infoRatingText"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/test_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package com.tomgu.rawgcards.main.ui
 
+import android.renderscript.Sampler
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,9 @@ import com.tomgu.rawgcards.main.api.GameResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.security.Key
 import javax.inject.Inject
+import kotlin.math.log
 
 class MainViewModel : ViewModel(), AppComponent.Injectable{
 
@@ -23,7 +26,10 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
     var categorie : String = "1"
-    var page : String = "1"
+
+    //Keys are categories and value is page number
+    var myMap : HashMap<String,Int> = hashMapOf("1" to 1, "2" to 1, "4" to 1, "5" to 1, "6" to 1)
+
 
     override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
@@ -31,7 +37,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     fun getApiItems() {
 
-        disposables.add(gameRepository.getApi().getStoreObject(1,categorie,"1995-01-01,2019-12-31")
+        disposables.add(gameRepository.getApi().getStoreObject(myMap.get(categorie)!!,categorie,"1995-01-01,2019-12-31")
             .subscribeOn(Schedulers.io())
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -60,7 +66,17 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
             "RPG" -> categorie = "5"
             "Fighting" -> categorie = "6"
         }
-        Log.d("blabla", categorie)
+    }
+
+    fun setPageNumber(){
+        myMap.put(categorie, myMap.get(categorie)!! + 1)
+    }
+
+    fun resetAllPages(){
+        for(entry in myMap.entries){
+            myMap.put(entry.key,1)
+        }
+        Log.d("billyz", myMap.toString())
     }
 
 }

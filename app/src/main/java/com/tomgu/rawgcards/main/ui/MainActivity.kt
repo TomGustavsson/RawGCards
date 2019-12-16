@@ -12,6 +12,7 @@ import com.wenchao.cardstack.CardStack
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.categoriedialog.Categorie
@@ -45,11 +46,14 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
+        val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
+
         switchCategories = findViewById(R.id.switchCategories)
         favouritesFragment = GameListFragment()
-        dialogCategories =
-            DialogCategories()
+        dialogCategories = DialogCategories()
 
+
+        //Open dialog with switch object
         val com = object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
                 if(p1){
@@ -59,7 +63,18 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
                 }
             }
         }
+
         switchCategories.setOnCheckedChangeListener(com)
+
+        //Reverse Button
+        reverseFab.setOnClickListener {
+            reverseFab.animate().rotation(reverseFab.getRotation()-360).start()
+            viewModel.resetAllPages()
+            card_adapter!!.clear()
+            viewModel.getApiItems()
+            card_stack!!.reset(true)
+            cardIndex = 0
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
 
@@ -99,15 +114,22 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
             card_adapter!!.add(game)
         })
 
+
     }
+
 
     override fun swipeEnd(i: Int, v: Float): Boolean {
 
         if (i == 1 || i == 3){
-            viewModel.setSaveGameList(card_adapter!!.getItem(cardIndex))
+            viewModel.setSaveGameList(card_adapter!!.getItem(card_stack!!.currIndex))
             cardIndex ++
         } else {
             cardIndex ++
+        }
+        if(cardIndex >= 18){
+            viewModel.setPageNumber()
+            viewModel.getApiItems()
+            cardIndex = 0
         }
 
         return v > 300
@@ -130,11 +152,16 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     }
 
     fun changeSwitch(categorie: Categorie){
-        switchCategories.toggle()
+        switchToggle()
         card_adapter!!.clear()
         viewModel.setCategorieToApi(categorie.name)
         viewModel.getApiItems()
         card_stack!!.reset(true)
+        cardIndex = 0
+    }
+
+    fun switchToggle(){
+        switchCategories.toggle()
     }
 
 }

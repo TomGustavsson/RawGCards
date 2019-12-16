@@ -1,5 +1,6 @@
 package com.tomgu.rawgcards.main.categoriedialog
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ class DialogCategories: DialogFragment() {
 
         return view
     }
+
 
 
     private fun initRecyclerView() {

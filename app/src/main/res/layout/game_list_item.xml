@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryLight"
-    android:padding="2dp">
+    android:background="@android:color/transparent"
+    android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colorPrimaryLighter"
         app:cardPreventCornerOverlap="false"
         android:padding="10dp">
 
@@ -58,7 +57,7 @@
                     android:padding="3dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="Title"
-                    android:textColor="@color/colorPrimaryLighter" />
+                    android:textColor="@color/colorPrimary" />
 
                 <TextView
                     android:id="@+id/game_list_rating"
@@ -67,7 +66,7 @@
                     android:padding="3dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="Rating"
-                    android:textColor="@color/colorPrimaryLighter" />
+                    android:textColor="@color/colorPrimary" />
 
 
             </LinearLayout>

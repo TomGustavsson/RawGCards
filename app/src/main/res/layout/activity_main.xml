@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".main.ui.MainActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/reverseFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="3dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_replay_black_24dp" />
+
     <Switch
         android:id="@+id/switchCategories"
         android:layout_width="wrap_content"
