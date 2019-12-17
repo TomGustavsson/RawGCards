@@ -1,11 +1,12 @@
 package com.tomgu.rawgcards.main.ui
 
-import android.renderscript.Sampler
+import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.tomgu.rawgcards.di.AppApplication
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.main.GameRepository
 import com.tomgu.rawgcards.main.api.Game
@@ -13,9 +14,8 @@ import com.tomgu.rawgcards.main.api.GameResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.security.Key
 import javax.inject.Inject
-import kotlin.math.log
+
 
 class MainViewModel : ViewModel(), AppComponent.Injectable{
 
@@ -23,6 +23,9 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     @Inject
     lateinit var gameRepository: GameRepository
+
+    @Inject
+    lateinit var pagePreferences: SharedPreferences
 
     private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
     var categorie : String = "1"
@@ -47,6 +50,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
             },{
                 Log.d("tgiwe", it.toString())
             }))
+
     }
 
     fun getLiveData() : MutableLiveData<GameResponse>{
@@ -70,13 +74,31 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     fun setPageNumber(){
         myMap.put(categorie, myMap.get(categorie)!! + 1)
+        saveHashMap()
     }
 
     fun resetAllPages(){
         for(entry in myMap.entries){
             myMap.put(entry.key,1)
         }
-        Log.d("billyz", myMap.toString())
     }
 
+    fun saveHashMap(){
+
+        pagePreferences.edit().also {
+            myMap.keys.forEach {key ->
+                it.putInt(key, myMap[key] ?: 0)
+            }
+            it.apply()
+        }
+    }
+
+    fun getHashMap(){
+
+        pagePreferences.also {
+            myMap.keys.forEach {key ->
+                myMap.put(key, it.getInt(key, 0))
+            }
+        }
+    }
 }

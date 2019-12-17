@@ -37,8 +37,6 @@ class DialogCategories: DialogFragment() {
         return view
     }
 
-
-
     private fun initRecyclerView() {
 
         categorieRecycler.layoutManager = LinearLayoutManager(activity)

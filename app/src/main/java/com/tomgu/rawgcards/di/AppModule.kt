@@ -1,13 +1,15 @@
 package com.tomgu.rawgcards.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.room.Room
+import com.google.gson.Gson
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.db.AppDB
 import com.tomgu.rawgcards.db.GameDao
 import com.tomgu.rawgcards.main.GameRepository
 import com.tomgu.rawgcards.main.api.GameAPI
-import com.tomgu.rawgcards.main.ui.MainViewModel
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -29,6 +31,13 @@ class AppModule(private val applicationContext: Context){
     @Provides
     fun appViewModelCreator(appApplication: AppApplication): AppViewModelFactory {
         return AppViewModelFactory(appApplication)
+    }
+
+    @Singleton
+    @Provides
+    fun sharedPreferences(context: Context): SharedPreferences {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        return prefs
     }
 
     @Singleton

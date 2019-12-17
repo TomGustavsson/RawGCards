@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         //Dagger2 skit
         (applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
@@ -48,10 +49,11 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
 
+        viewModel.getHashMap()
+
         switchCategories = findViewById(R.id.switchCategories)
         favouritesFragment = GameListFragment()
         dialogCategories = DialogCategories()
-
 
         //Open dialog with switch object
         val com = object : CompoundButton.OnCheckedChangeListener{
@@ -163,5 +165,4 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     fun switchToggle(){
         switchCategories.toggle()
     }
-
 }
