@@ -28,10 +28,15 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
     lateinit var pagePreferences: SharedPreferences
 
     private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
+
     var categorie : String = "1"
+        get() = field
+        private set(value) {
+            field = value
+        }
 
     //Keys are categories and value is page number
-    var myMap : HashMap<String,Int> = hashMapOf("1" to 1, "2" to 1, "4" to 1, "5" to 1, "6" to 1)
+    private val myMap : HashMap<String,Int> = hashMapOf("1" to 1, "2" to 1, "4" to 1, "5" to 1, "6" to 1)
 
 
     override fun inject(appComponent: AppComponent) {
@@ -72,7 +77,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         }
     }
 
-    fun setPageNumber(){
+    fun incrementCurrentPage(){
         myMap.put(categorie, myMap.get(categorie)!! + 1)
         saveHashMap()
     }
@@ -83,7 +88,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         }
     }
 
-    fun saveHashMap(){
+    private fun saveHashMap(){
 
         pagePreferences.edit().also {
             myMap.keys.forEach {key ->
@@ -93,12 +98,22 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         }
     }
 
-    fun getHashMap(){
+    fun getHashMapFromPreferences(){
 
         pagePreferences.also {
             myMap.keys.forEach {key ->
-                myMap.put(key, it.getInt(key, 0))
+                myMap.put(key, it.getInt(key, 1))
             }
         }
     }
+
+    fun getHashMap(): HashMap<String,Int>{
+        return myMap
+    }
+
+    fun getActionKey(): Int{
+        return myMap.get("4")!!
+    }
+
+
 }

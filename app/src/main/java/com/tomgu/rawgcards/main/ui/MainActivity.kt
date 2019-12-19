@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
 
-        viewModel.getHashMap()
+        viewModel.getHashMapFromPreferences()
 
         switchCategories = findViewById(R.id.switchCategories)
         favouritesFragment = GameListFragment()
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
             cardIndex ++
         }
         if(cardIndex >= 18){
-            viewModel.setPageNumber()
+            viewModel.incrementCurrentPage()
             viewModel.getApiItems()
             cardIndex = 0
         }
