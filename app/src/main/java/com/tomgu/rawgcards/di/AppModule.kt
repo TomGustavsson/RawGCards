@@ -4,10 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.room.Room
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.gson.Gson
 import com.tomgu.rawgcards.AppViewModelFactory
+import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.db.AppDB
 import com.tomgu.rawgcards.db.GameDao
+import com.tomgu.rawgcards.login.AccountRepository
 import com.tomgu.rawgcards.main.GameRepository
 import com.tomgu.rawgcards.main.api.GameAPI
 import dagger.Module
@@ -80,6 +85,27 @@ class AppModule(private val applicationContext: Context){
     @Provides
     fun gameRepository(gameAPI: GameAPI, gameDao: GameDao) : GameRepository{
         return GameRepository(gameAPI, gameDao)
+    }
+
+    @Singleton
+    @Provides
+    fun googleSignInOption(applicationContext: Context): GoogleSignInOptions{
+        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(applicationContext.getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun googleSignInClient(googleSignInOptions: GoogleSignInOptions): GoogleSignInClient{
+        return GoogleSignIn.getClient(applicationContext,googleSignInOptions)
+    }
+
+    @Singleton
+    @Provides
+    fun accountRepository(): AccountRepository{
+        return AccountRepository()
     }
 
 }

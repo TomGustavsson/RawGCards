@@ -1,6 +1,8 @@
 package com.tomgu.rawgcards.di
 
 import com.tomgu.rawgcards.AppViewModelFactory
+import com.tomgu.rawgcards.login.LoginActivity
+import com.tomgu.rawgcards.login.LoginViewModel
 import com.tomgu.rawgcards.main.gamedialog.GIDViewModel
 import com.tomgu.rawgcards.main.gamedialog.GameInfoDialog
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
@@ -27,6 +29,10 @@ interface AppComponent {
     fun inject(gameInfoDialog: GameInfoDialog)
 
     fun inject(gidViewModel: GIDViewModel)
+
+    fun inject(loginViewModel: LoginViewModel)
+
+    fun inject(loginActivity: LoginActivity)
 
     fun appViewModelFactory(): AppViewModelFactory
 

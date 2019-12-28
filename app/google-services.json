@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "170415542978",
+    "firebase_url": "https://rawgcards-19d75.firebaseio.com",
+    "project_id": "rawgcards-19d75",
+    "storage_bucket": "rawgcards-19d75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170415542978:android:8c60db0e8900d34168215b",
+        "android_client_info": {
+          "package_name": "com.tomgu.rawgcards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170415542978-n65l9q3j9hqka7gsbbddr9osb782lpkv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tomgu.rawgcards",
+            "certificate_hash": "7b27fee53655b4db3ac55918da6d54fb939cd3e6"
+          }
+        },
+        {
+          "client_id": "170415542978-4jk3ubbgva01u4r5os05eps4ii5lqmef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZTktcv8WTDY34UIXNLkQSseIxptq57qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170415542978-4jk3ubbgva01u4r5os05eps4ii5lqmef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

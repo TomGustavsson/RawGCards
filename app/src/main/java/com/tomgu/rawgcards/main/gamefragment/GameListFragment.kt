@@ -33,7 +33,7 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
     lateinit var gameInfoDialog: GameInfoDialog
 
     lateinit var viewModel: GameListViewModel
-    lateinit var clickList : MutableList<Game>
+    //lateinit var clickList : MutableList<Game>
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,8 +54,7 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
         viewModel.getLiveDataRoom().observe(this, Observer {
             Log.d("blabla", it.toString())
             recyclerAdapter.submitGamesList(it)
-            recyclerAdapter.notifyDataSetChanged()
-            clickList = it
+            //clickList = it
         })
 
     }
@@ -71,8 +70,8 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
     //Click to fragment dialog
     override fun onClick(index: Int) {
         gameInfoDialog.show(fragmentManager!!,"gameInfoDialog")
-        gameInfoDialog.setGameString(clickList.get(index).slug)
-        Log.d("hihi", "Game is clicked: " + clickList.get(index))
+        gameInfoDialog.setGameString(recyclerAdapter.getRecyclerList().get(index).slug)
+
     }
 
         //Swipe to delete items
@@ -82,8 +81,7 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            var game = clickList.get(viewHolder.adapterPosition)
-            clickList.removeAt(viewHolder.adapterPosition)
+            var game = recyclerAdapter.getRecyclerList().get(viewHolder.adapterPosition)
             viewModel.deleteGame(game)
         }
     }
