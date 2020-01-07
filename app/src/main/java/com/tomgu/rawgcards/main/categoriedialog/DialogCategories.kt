@@ -23,11 +23,7 @@ class DialogCategories: DialogFragment() {
 
     lateinit var categorieRecycler: RecyclerView
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.dialog_categories_list, container, false)
 
         categorieRecycler = view.findViewById(R.id.categoriesRecyclerView)

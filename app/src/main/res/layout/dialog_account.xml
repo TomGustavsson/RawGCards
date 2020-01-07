@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_dialog"
+    android:minWidth="260dp"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:padding="24dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:src="@drawable/guest_image" />
+
+            <TextView
+                android:id="@+id/emailTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email adress"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:fontFamily="@font/wallpoet"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/signOutTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="36dp"
+                android:fontFamily="@font/wallpoet"
+                android:layout_margin="5dp"
+                android:text="Log Out"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_remove_circle_outline_black_24dp"
+                android:textColor="#000"
+                android:padding="2dp"
+                android:textSize="16sp"
+                android:clickable="true"
+                android:focusable="true" />
+
+
+</LinearLayout>

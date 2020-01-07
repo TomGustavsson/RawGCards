@@ -1,9 +1,11 @@
 package com.tomgu.rawgcards.main.ui
 
+import android.accounts.Account
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.CompoundButton
+import android.widget.ImageView
 import android.widget.Switch
 import androidx.fragment.app.FragmentTransaction
 import com.tomgu.rawgcards.R
@@ -13,8 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.account.ui.AccountDialog
 import com.tomgu.rawgcards.main.categoriedialog.Categorie
 import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     lateinit var viewModel: MainViewModel
 
     lateinit var dialogCategories: DialogCategories
+    lateinit var accountDialog: AccountDialog
 
     var cardIndex : Int = 0
 
@@ -48,12 +53,14 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
+        val accountImage: ImageView = findViewById(R.id.accountImage)
 
         viewModel.getHashMapFromPreferences()
 
         switchCategories = findViewById(R.id.switchCategories)
         favouritesFragment = GameListFragment()
         dialogCategories = DialogCategories()
+        accountDialog = AccountDialog()
 
         //Open dialog with switch object
         val com = object : CompoundButton.OnCheckedChangeListener{
@@ -65,6 +72,12 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
                 }
             }
         }
+
+        viewModel.getCurrentAccount()
+
+       viewModel.getCurrentAccountLiveData().observe(this, Observer {
+            Picasso.get().load(it.photo).resize(500,500).into(accountImage)
+        })
 
         switchCategories.setOnCheckedChangeListener(com)
 
@@ -81,6 +94,10 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         bottomNavigationView.setOnNavigationItemSelectedListener {
 
             when(it.itemId){
+
+                R.id.account -> {
+                    accountDialog.show(supportFragmentManager, "accountDialog")
+                }
                 R.id.home -> {
                     supportFragmentManager
                         .beginTransaction()

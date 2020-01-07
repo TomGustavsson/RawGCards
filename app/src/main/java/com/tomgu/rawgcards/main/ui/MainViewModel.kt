@@ -2,12 +2,12 @@ package com.tomgu.rawgcards.main.ui
 
 import android.content.SharedPreferences
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.di.AppComponent
+import com.tomgu.rawgcards.login.AccountRepository
 import com.tomgu.rawgcards.main.GameRepository
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.api.GameResponse
@@ -23,6 +23,9 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     @Inject
     lateinit var gameRepository: GameRepository
+
+    @Inject
+    lateinit var accountRepository: AccountRepository
 
     @Inject
     lateinit var pagePreferences: SharedPreferences
@@ -113,6 +116,14 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     fun getActionKey(): Int{
         return myMap.get("4")!!
+    }
+
+    fun getCurrentAccount(){
+        accountRepository.getCurrentAccount()
+    }
+
+    fun getCurrentAccountLiveData() : LiveData<Account> {
+        return accountRepository.currentAccountMutableLiveData
     }
 
 

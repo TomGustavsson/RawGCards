@@ -6,35 +6,30 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.ui.MainViewModel
+import com.tomgu.rawgcards.main.ui.MainActivity
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 
-    @Inject
+
     lateinit var gso : GoogleSignInOptions
 
-    @Inject
     lateinit var googleSignInClient: GoogleSignInClient
     private val GOOGLE_SIGN = 123
 
     private lateinit var userText : TextView
     private lateinit var button : SignInButton
-    private lateinit var signOutButton: Button
 
     @Inject
     lateinit var vmFactory : AppViewModelFactory
@@ -50,18 +45,25 @@ class LoginActivity : AppCompatActivity() {
 
         button = findViewById<SignInButton>(R.id.signInButton)
         userText = findViewById<TextView>(R.id.userTextView)
-        signOutButton = findViewById(R.id.signOutButton)
 
-      /*  gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 
-       googleSignInClient = GoogleSignIn.getClient(this,gso)*/
+       googleSignInClient = GoogleSignIn.getClient(this,gso)
 
         button.setOnClickListener {
             signIn()
         }
+
+        viewModel.getLiveData().observe(this, Observer {
+            updateUI(it)
+           if (it != null){
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
 
 
     }
@@ -89,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    private fun updateUI(user: FirebaseUser?) {
-        userText.setText(user?.email.toString())
+    private fun updateUI(user: Account?) {
+        userText.setText(user?.email)
     }
 }

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "170415542978-8d4uov9rorpo9eqkgpb0us62vl9rt64t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tomgu.rawgcards",
+            "certificate_hash": "1b3aea1ff890f71386fe3c49e7115dda0be42e32"
+          }
+        },
+        {
           "client_id": "170415542978-n65l9q3j9hqka7gsbbddr9osb782lpkv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
