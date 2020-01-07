@@ -5,17 +5,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.gamefragment.GameListViewModel
+import com.tomgu.rawgcards.main.ui.MainActivity
 import kotlinx.android.synthetic.*
 import javax.inject.Inject
 
@@ -27,6 +30,7 @@ class GameInfoDialog : DialogFragment(){
 
     lateinit var gameSlug: String
 
+
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     var view: View = inflater.inflate(R.layout.dialog_game_info, container, false)
 
@@ -35,6 +39,7 @@ class GameInfoDialog : DialogFragment(){
    var infoRatingText = view.findViewById<TextView>(R.id.infoRatingText)
    var descriptionScrollView = view.findViewById<TextView>(R.id.descriptionScrollView)
    var extraInfoImage = view.findViewById<ImageView>(R.id.extraInfoImage)
+    var shareButton = view.findViewById<FloatingActionButton>(R.id.shareButton)
 
       (activity?.applicationContext as AppApplication).appComponent().inject(this)
       viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
@@ -42,6 +47,10 @@ class GameInfoDialog : DialogFragment(){
       viewModel.getRoomObject(gameSlug)
       viewModel.getApiInfo(gameSlug)
 
+      shareButton.setOnClickListener {
+        val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog()
+          bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
+      }
       viewModel.getLiveDataRoom().observe(this, Observer {
           Picasso.get().load(it.background_image).into(gameInfoImage)
           infoTitleText.setText(it.name)

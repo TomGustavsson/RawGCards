@@ -24,6 +24,12 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         return accountRepository.currentAccountMutableLiveData
     }
 
+    fun retrieveFriends(): LiveData<MutableList<Account>> {
+        accountRepository.retrieveFriends()
+        return accountRepository.allFriendsMutableLiveData
+    }
+
+
     fun signOut(){
         accountRepository.signOut()
     }

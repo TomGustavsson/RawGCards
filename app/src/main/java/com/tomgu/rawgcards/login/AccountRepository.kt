@@ -1,6 +1,7 @@
 package com.tomgu.rawgcards.login
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.OnCompleteListener
@@ -18,6 +19,8 @@ class AccountRepository {
     val authenticatedUserMutableLiveData : MutableLiveData<Account> = MutableLiveData()
 
     val currentAccountMutableLiveData : MutableLiveData<Account> = MutableLiveData()
+
+    val allFriendsMutableLiveData : MutableLiveData<MutableList<Account>> = MutableLiveData()
 
     fun firebaseSignInWithGoogle(acct: GoogleSignInAccount): MutableLiveData<Account> {
         Log.d("Billyz", "firebaseAuthWithGoogle:" + acct.id!!)
@@ -69,8 +72,38 @@ class AccountRepository {
         }
     }
 
+
     fun signOut(){
         auth.signOut()
+    }
+
+    fun addFriend(){
+        db.document("LV22GJAV24d5MlxiJ7ofAHrR5ER2").get().addOnSuccessListener { documentSnapshot ->
+            val account = documentSnapshot.toObject(Account::class.java)
+            db.document(auth.currentUser!!.uid).update("friends", account!!.uid)
+                .addOnSuccessListener {
+                    Log.d("Tgiw", "Friend Added")
+                }.addOnFailureListener {
+                    Log.d("Tgiw", "Couldnt add friend")
+                }
+        }
+    }
+
+    fun retrieveFriends(){
+        db.document(auth.currentUser!!.uid).get().addOnSuccessListener { documentSnapshot ->
+            val account = documentSnapshot.toObject(Account::class.java)
+            val friends = account!!.friends
+            var allFriends = mutableListOf<Account>()
+
+            friends!!.forEach {
+                db.document(it).get().addOnSuccessListener {
+                    val friendAccount = it.toObject(Account::class.java)
+                    Log.d("fredroids", friendAccount!!.email +" uid: " + friendAccount.uid)
+                    allFriends.add(friendAccount!!)
+                    allFriendsMutableLiveData.value = allFriends
+                }
+            }
+        }
     }
 
 }

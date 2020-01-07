@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".main.ui.MainActivity">
 
-    <ImageView
-        android:id="@+id/accountImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/guest_image" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/reverseFab"
         android:layout_width="wrap_content"

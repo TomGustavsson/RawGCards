@@ -1,6 +1,5 @@
 package com.tomgu.rawgcards.main.ui
 
-import android.accounts.Account
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.main.account.ui.AccountDialog
 import com.tomgu.rawgcards.main.categoriedialog.Categorie
 import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
         val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
-        val accountImage: ImageView = findViewById(R.id.accountImage)
+
+        //viewModel.addFriend()
 
         viewModel.getHashMapFromPreferences()
 
@@ -75,10 +76,6 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
         viewModel.getCurrentAccount()
 
-       viewModel.getCurrentAccountLiveData().observe(this, Observer {
-            Picasso.get().load(it.photo).resize(500,500).into(accountImage)
-        })
-
         switchCategories.setOnCheckedChangeListener(com)
 
         //Reverse Button
@@ -96,7 +93,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
             when(it.itemId){
 
                 R.id.account -> {
-                    accountDialog.show(supportFragmentManager, "accountDialog")
+                    openAccountDialog()
                 }
                 R.id.home -> {
                     supportFragmentManager
@@ -181,5 +178,9 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
     fun switchToggle(){
         switchCategories.toggle()
+    }
+
+    fun openAccountDialog(){
+        accountDialog.show(supportFragmentManager, "accountDialog")
     }
 }

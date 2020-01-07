@@ -126,5 +126,9 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         return accountRepository.currentAccountMutableLiveData
     }
 
+    fun addFriend(){
+        accountRepository.addFriend()
+    }
+
 
 }
