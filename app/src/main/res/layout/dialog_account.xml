@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="account"
+            type="com.tomgu.rawgcards.main.account.Account" />
+    </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -30,7 +38,7 @@
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/guest_image" />
+                app:loadImageCircle="@{account.photo}" />
 
           <TextView
              android:id="@+id/emailTextView"
@@ -39,7 +47,7 @@
              android:layout_gravity="center"
              android:layout_margin="5dp"
              android:fontFamily="@font/wallpoet"
-             android:text="Email adress"
+             android:text="@{account.email}"
              android:textColor="#000"
               android:textAlignment="center"
              android:textSize="9sp" />
@@ -71,3 +79,5 @@
 
 
 </LinearLayout>
+
+</layout>

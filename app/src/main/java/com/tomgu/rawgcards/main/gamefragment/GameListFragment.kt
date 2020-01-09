@@ -52,9 +52,7 @@ class GameListFragment : Fragment(), RecyclerAdapter.OnClickListener {
         viewModel.getRoomItems()
 
         viewModel.getLiveDataRoom().observe(this, Observer {
-            Log.d("blabla", it.toString())
             recyclerAdapter.submitGamesList(it)
-            //clickList = it
         })
 
     }

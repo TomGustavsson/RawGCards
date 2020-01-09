@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="game"
+            type="com.tomgu.rawgcards.main.api.Game" />
+        <variable
+            name="gameInf"
+            type="com.tomgu.rawgcards.main.api.GameInfo" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -26,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/test_image" />
+            app:loadImage="@{game.background_image}" />
 
     </com.github.florent37.diagonallayout.DiagonalLayout>
 
@@ -50,7 +62,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/wallpoet"
         android:padding="10dp"
-        android:text="Title"
+        android:text="@{game.name}"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/wallpoet"
-        android:text="Rating"
+        android:text="@{game.rating}"
         android:textColor="@color/design_default_color_primary_dark"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/wallpoet"
                 android:padding="5dp"
-                android:text="TextView"
+                android:text="@{gameInf.description}"
                 android:textColor="@color/design_default_color_primary" />
         </LinearLayout>
     </ScrollView>
@@ -123,6 +135,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/infoRatingText"
-        app:srcCompat="@drawable/test_image" />
+        app:loadImage="@{gameInf.background_image_additional}" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ContentView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,10 +18,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
+import com.tomgu.rawgcards.databinding.DialogGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.gamefragment.GameListViewModel
 import com.tomgu.rawgcards.main.ui.MainActivity
 import kotlinx.android.synthetic.*
+import kotlinx.android.synthetic.main.dialog_game_info.*
 import javax.inject.Inject
 
 class GameInfoDialog : DialogFragment(){
@@ -32,14 +36,8 @@ class GameInfoDialog : DialogFragment(){
 
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-    var view: View = inflater.inflate(R.layout.dialog_game_info, container, false)
-
-   var gameInfoImage = view.findViewById<ImageView>(R.id.gameInfoImage)
-   var infoTitleText = view.findViewById<TextView>(R.id.infoTitleText)
-   var infoRatingText = view.findViewById<TextView>(R.id.infoRatingText)
-   var descriptionScrollView = view.findViewById<TextView>(R.id.descriptionScrollView)
-   var extraInfoImage = view.findViewById<ImageView>(R.id.extraInfoImage)
-    var shareButton = view.findViewById<FloatingActionButton>(R.id.shareButton)
+      var binding: DialogGameInfoBinding = DialogGameInfoBinding.inflate(LayoutInflater.from(context))
+      var shareButton = binding.root.findViewById<FloatingActionButton>(R.id.shareButton)
 
       (activity?.applicationContext as AppApplication).appComponent().inject(this)
       viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
@@ -52,19 +50,14 @@ class GameInfoDialog : DialogFragment(){
           bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
       }
       viewModel.getLiveDataRoom().observe(this, Observer {
-          Picasso.get().load(it.background_image).into(gameInfoImage)
-          infoTitleText.setText(it.name)
-          infoRatingText.setText(it.rating)
+          binding.game = it
       })
 
       viewModel.getLiveDataApi().observe(this, Observer {
-          Picasso.get().load(it.background_image_additional).into(extraInfoImage)
-          descriptionScrollView.setText(it.description)
+          binding.gameInf = it
       })
-
-   return view
+   return binding.root
   }
-
     fun setGameString(gs: String){
         gameSlug = gs
     }
