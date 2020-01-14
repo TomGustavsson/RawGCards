@@ -20,6 +20,7 @@ import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.DialogGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.gamefragment.GameListViewModel
 import com.tomgu.rawgcards.main.ui.MainActivity
 import kotlinx.android.synthetic.*
@@ -34,6 +35,8 @@ class GameInfoDialog : DialogFragment(){
 
     lateinit var gameSlug: String
 
+    lateinit var gameShare: Game
+
 
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
       var binding: DialogGameInfoBinding = DialogGameInfoBinding.inflate(LayoutInflater.from(context))
@@ -42,14 +45,15 @@ class GameInfoDialog : DialogFragment(){
       (activity?.applicationContext as AppApplication).appComponent().inject(this)
       viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
 
-      viewModel.getRoomObject(gameSlug)
+       viewModel.getRoomObject(gameSlug)
       viewModel.getApiInfo(gameSlug)
 
       shareButton.setOnClickListener {
-        val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog()
+        val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(gameShare)
           bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
       }
       viewModel.getLiveDataRoom().observe(this, Observer {
+          gameShare = it
           binding.game = it
       })
 

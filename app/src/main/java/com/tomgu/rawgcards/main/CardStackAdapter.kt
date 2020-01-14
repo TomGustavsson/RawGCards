@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -22,11 +23,13 @@ class CardStackAdapter(context: Context, resource: Int) : ArrayAdapter<Game>(con
         val imageView = convertView!!.findViewById<ImageView>(R.id.image_content)
         val titleTextView = convertView!!.findViewById<TextView>(R.id.titleTextView)
         val ratingTextView = convertView!!.findViewById<TextView>(R.id.ratingTextView)
+        val progressBar = convertView!!.findViewById<ProgressBar>(R.id.progressBarCard)
         val game : Game = getItem(position)
 
         titleTextView.setText(game.name)
         ratingTextView.setText(game.rating)
         Picasso.get().load(game.background_image).resize(500,500).into(imageView)
+        progressBar.visibility = View.GONE
 
         return convertView
     }

@@ -15,6 +15,7 @@
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
@@ -39,6 +40,8 @@
                     android:layout_gravity="center"
                     app:loadImageCircle="@{account.photo}"/>
             <LinearLayout
+                android:padding="5dp"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -49,6 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingStart="20dp"
+                    android:padding="5dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="@{account.email}"
                     android:textSize="7sp"
@@ -59,6 +63,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingStart="20dp"
+                    android:padding="5dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="@{account.name}"
                     android:textSize="6sp"

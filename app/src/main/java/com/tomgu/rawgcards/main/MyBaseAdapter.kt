@@ -1,17 +1,13 @@
 package com.tomgu.rawgcards.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.tomgu.rawgcards.MyBaseDiffUtil
 
-
-abstract class MyBaseAdapter<T, D : ViewDataBinding> :
-    RecyclerView.Adapter<MyBaseAdapter.MyViewHolder<D>>() {
-
+abstract class MyBaseAdapter<T, D : ViewDataBinding>: RecyclerView.Adapter<MyBaseAdapter.MyViewHolder<D>>() {
 
     var listItems: List<T> = mutableListOf()
 
@@ -29,7 +25,6 @@ abstract class MyBaseAdapter<T, D : ViewDataBinding> :
     override fun getItemCount(): Int {
         return listItems.size
     }
-
 
     override fun onBindViewHolder(holder: MyViewHolder<D>, position: Int) {
         onBindData(listItems[position], holder.binding)

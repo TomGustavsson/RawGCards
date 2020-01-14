@@ -4,7 +4,7 @@
 
     <data>
         <variable
-            name="obj"
+            name="game"
             type="com.tomgu.rawgcards.main.api.Game" />
     </data>
 
@@ -16,6 +16,7 @@
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/gameListRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
@@ -47,7 +48,7 @@
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/test_image" />
+                    app:loadImage="@{game.background_image}" />
             </com.github.florent37.diagonallayout.DiagonalLayout>
 
             <LinearLayout
@@ -65,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:fontFamily="@font/wallpoet"
-                    android:text="@{obj.name}"
+                    android:text="@{game.name}"
                     android:textColor="@color/colorPrimary" />
 
                 <TextView
@@ -74,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:padding="3dp"
                     android:fontFamily="@font/wallpoet"
-                    android:text="@{obj.rating}"
+                    android:text="@{game.rating}"
                     android:textColor="@color/colorPrimary" />
 
 

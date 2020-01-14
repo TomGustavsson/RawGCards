@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="categorie"
+            type="com.tomgu.rawgcards.main.categoriedialog.Categorie" />
+    </data>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -8,6 +17,7 @@
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/categorieRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
@@ -27,7 +37,7 @@
                 android:padding="5dp"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
-                android:src="@drawable/shooting_icon"/>
+                app:loadImageResource="@{categorie.image}"/>
 
             <TextView
                 android:id="@+id/categorie_textview"
@@ -35,7 +45,7 @@
                 android:paddingStart="50dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shooting"
+                android:text="@{categorie.name}"
                 android:fontFamily="@font/wallpoet"
                 android:textColor="#000"
                 android:textSize="18sp"/>
@@ -47,3 +57,5 @@
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
+
+</layout>

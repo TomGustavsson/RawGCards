@@ -22,6 +22,7 @@ import com.tomgu.rawgcards.main.account.ui.AccountDialog
 import com.tomgu.rawgcards.main.categoriedialog.Categorie
 import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
             }
         }
 
-        viewModel.getCurrentAccount()
+        //viewModel.getCurrentAccount()
 
         switchCategories.setOnCheckedChangeListener(com)
 
@@ -98,7 +99,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
                 R.id.home -> {
                     supportFragmentManager
                         .beginTransaction()
-                        .remove(favouritesFragment)
+                        .remove(supportFragmentManager.findFragmentById(R.id.frame_layout)!!)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .commit()
                 }

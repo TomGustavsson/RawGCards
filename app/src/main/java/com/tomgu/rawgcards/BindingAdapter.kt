@@ -8,7 +8,7 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("loadImage")
-    fun loadImageUrl(view: ImageView, url: String){
+    fun loadImageUrl(view: ImageView, url: String?){
         if(url==null){
             view.setImageResource(R.drawable.test_image)
         } else {
@@ -18,12 +18,18 @@ object BindingAdapter {
 
     @JvmStatic
     @BindingAdapter("loadImageCircle")
-    fun loadImageUrlCircle(view: de.hdodenhof.circleimageview.CircleImageView, url: String){
+    fun loadImageUrlCircle(view: de.hdodenhof.circleimageview.CircleImageView, url: String?){
         if(url==null){
             view.setImageResource(R.drawable.guest_image)
         } else {
             Picasso.get().load(url).resize(500, 500).into(view)
         }
+    }
+
+    @JvmStatic
+    @BindingAdapter("loadImageResource")
+    fun loadImageResource(view: ImageView, resource: Int){
+        Picasso.get().load(resource).into(view)
     }
 
 }

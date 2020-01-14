@@ -2,11 +2,13 @@ package com.tomgu.rawgcards.main.account.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -21,15 +23,16 @@ import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.login.LoginActivity
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class AccountDialog: DialogFragment() {
 
-    private val disposables = CompositeDisposable()
-
     @Inject
     lateinit var vmFactory: AppViewModelFactory
+
     lateinit var viewModel: AccountDialogViewModel
 
     lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
@@ -53,21 +56,51 @@ class AccountDialog: DialogFragment() {
         signOutText = binding.root.findViewById(R.id.signOutTextView)
 
         viewModel.getCurrentAccount()
+        friends()
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
         })
 
-        viewModel.retrieveFriends().observe(this, Observer {
-            val diffResult : DiffUtil.DiffResult = DiffUtil.calculateDiff(
-                MyBaseDiffUtil(
-                    friendsAdapter.listItems,
-                    it
-                )
-            )
-            friendsAdapter.listItems = it
-            diffResult.dispatchUpdatesTo(friendsAdapter)
+        viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
+
+            Observable.just(it)
+                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    friendsAdapter.listItems = it.first
+                    it.second.dispatchUpdatesTo(friendsAdapter)
+                    Log.d("greken", it.toString())
+
+                },{
+                    Log.d("tgiw", it.toString())
+                })
         })
+
+        viewModel.getUsersLiveData().observe(this, Observer{
+            Observable.just(it)
+                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    friendsAdapter.listItems = it.first
+                    it.second.dispatchUpdatesTo(friendsAdapter)
+
+                },{
+                    Log.d("tgiw", it.toString())
+                })
+        })
+
+        binding.usersTextView.setOnClickListener {
+            viewModel.getAllUsers()
+        }
+
+        binding.friendsTextView.setOnClickListener {
+            friends()
+        }
 
         signOutText.setOnClickListener {
             viewModel.signOut()
@@ -84,9 +117,22 @@ class AccountDialog: DialogFragment() {
                 }
                 override fun onBindData(model: Account, dataBinding: FriendListItemBinding) {
                     dataBinding.account = model
+                    dataBinding.root.setOnClickListener {
+                        dismiss()
+                        val friendFragment = FriendFragment(model)
+                        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                        friendFragment.tag
+                        fragmentTransaction.replace(R.id.frame_layout, friendFragment)
+                        fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
+                        fragmentTransaction.commit()
+                    }
             }
         }
         friendsRecyclerView.adapter = friendsAdapter
+    }
+
+    private fun friends(){
+        viewModel.getFriends()
     }
 
 
