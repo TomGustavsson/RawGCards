@@ -6,13 +6,16 @@
         <variable
             name="game"
             type="com.tomgu.rawgcards.main.api.Game" />
+        <variable
+            name="appUtils"
+            type="com.tomgu.rawgcards.AppUtils" />
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
+    android:background="#23395B"
     android:padding="5dp">
 
     <androidx.cardview.widget.CardView
@@ -20,12 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@color/colorPrimaryLighter"
         app:cardPreventCornerOverlap="false"
         android:padding="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
+            android:background="@drawable/gradient_list_item"
             android:layout_height="wrap_content">
 
             <com.github.florent37.diagonallayout.DiagonalLayout
@@ -67,16 +70,32 @@
                     android:padding="3dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="@{game.name}"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="#8EA8C3" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RatingBar
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:id="@+id/ratingBarGameList"
+                    app:getRatingFloat="@{game.rating}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
 
                 <TextView
                     android:id="@+id/game_list_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
+                    android:layout_gravity="center"
+                    android:paddingStart="5dp"
                     android:fontFamily="@font/wallpoet"
                     android:text="@{game.rating}"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="#8EA8C3" />
+
+            </LinearLayout>
 
 
             </LinearLayout>

@@ -19,15 +19,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
-        app:cardBackgroundColor="@color/colorPrimaryLighter"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardPreventCornerOverlap="false"
+        app:cardElevation="0dp"
         android:padding="10dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="5dp"
+                android:background="@drawable/gradient_list_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -42,7 +43,7 @@
             <LinearLayout
                 android:padding="5dp"
                 android:layout_gravity="center"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -56,7 +57,7 @@
                     android:fontFamily="@font/wallpoet"
                     android:text="@{account.email}"
                     android:textSize="7sp"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="#8EA8C3" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,7 +68,7 @@
                     android:fontFamily="@font/wallpoet"
                     android:text="@{account.name}"
                     android:textSize="6sp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="#8EA8C3"/>
 
             </LinearLayout>
 

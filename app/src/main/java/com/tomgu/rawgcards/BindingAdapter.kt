@@ -1,6 +1,7 @@
 package com.tomgu.rawgcards
 
 import android.widget.ImageView
+import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
 
@@ -31,5 +32,12 @@ object BindingAdapter {
     fun loadImageResource(view: ImageView, resource: Int){
         Picasso.get().load(resource).into(view)
     }
+
+    @JvmStatic
+    @BindingAdapter("getRatingFloat")
+    fun getRatingFloat(bar : RatingBar, string : String){
+        bar.rating = string.toFloat()
+    }
+
 
 }

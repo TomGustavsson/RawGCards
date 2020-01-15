@@ -89,21 +89,6 @@ class AppModule(private val applicationContext: Context){
 
     @Singleton
     @Provides
-    fun googleSignInOption(applicationContext: Context): GoogleSignInOptions{
-        return GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(applicationContext.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-    }
-
-    @Singleton
-    @Provides
-    fun googleSignInClient(googleSignInOptions: GoogleSignInOptions): GoogleSignInClient{
-        return GoogleSignIn.getClient(applicationContext,googleSignInOptions)
-    }
-
-    @Singleton
-    @Provides
     fun accountRepository(): AccountRepository{
         return AccountRepository()
     }

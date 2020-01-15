@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.CollectionReference
@@ -12,8 +13,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.main.api.Game
-import io.reactivex.Completable
-
 
 class AccountRepository {
 
@@ -74,12 +73,14 @@ class AccountRepository {
         auth.signOut()
     }
 
-    fun acceptFriendRequest(friendUid: String) {
+    fun acceptFriendRequest(friendUid: String, callback : (Boolean) -> Unit) {
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
             account?.friends!!.add(friendUid)
             account.friendRequests!!.remove(friendUid)
-            db.document(auth.currentUser!!.uid).set(account)
+            db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
+                callback.invoke(it.isSuccessful)
+            }
         }
     }
 
@@ -91,7 +92,7 @@ class AccountRepository {
         }
     }
 
-    fun addFriend(friendUid: String) {
+    fun addFriend(friendUid: String, callback : (Boolean) -> Unit) {
 
         db.document(friendUid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
@@ -101,12 +102,10 @@ class AccountRepository {
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
             account?.friends!!.add(friendUid)
-            db.document(auth.currentUser!!.uid).set(account)
+            db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
+                callback.invoke(it.isSuccessful)
+            }
         }
-    }
-
-    fun retrieveFriends(): DocumentReference {
-        return db.document(auth.currentUser!!.uid)
     }
 
     fun retrieveSharedGames(): CollectionReference{
@@ -121,6 +120,7 @@ class AccountRepository {
         db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
             .collection("SharedGames").document().set(game)
     }
+
 
 }
 

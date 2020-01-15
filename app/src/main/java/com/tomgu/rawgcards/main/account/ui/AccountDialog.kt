@@ -35,10 +35,10 @@ class AccountDialog: DialogFragment() {
 
     lateinit var viewModel: AccountDialogViewModel
 
-    lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
+    private lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
 
-    lateinit var signOutText: TextView
-    lateinit var friendsRecyclerView: RecyclerView
+    private lateinit var signOutText: TextView
+    private lateinit var friendsRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +60,12 @@ class AccountDialog: DialogFragment() {
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
+
+            if (it.friendRequests!!.size == 0){
+                binding.friendRoot.visibility = View.GONE
+            } else {
+                binding.requestCountTextView.setText(it.friendRequests!!.size.toString())
+            }
         })
 
         viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
@@ -94,6 +100,22 @@ class AccountDialog: DialogFragment() {
                 })
         })
 
+        viewModel.getFriendRequestLiveData().observe(this, Observer {
+
+            Observable.just(it)
+                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    friendsAdapter.listItems = it.first
+                    it.second.dispatchUpdatesTo(friendsAdapter)
+
+                },{
+                    Log.d("tgiw", it.toString())
+                })
+        })
+
         binding.usersTextView.setOnClickListener {
             viewModel.getAllUsers()
         }
@@ -107,6 +129,13 @@ class AccountDialog: DialogFragment() {
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
+
+
+        //Friend Request button
+        binding.friendRoot.setOnClickListener{
+            viewModel.getAllFriendRequests()
+        }
+
         return binding.root
     }
     private fun initRecyclerView() {

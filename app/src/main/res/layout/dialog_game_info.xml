@@ -14,7 +14,7 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:orientation="vertical"
-    android:background="@drawable/rounded_corner_dialog"
+    android:background="@drawable/gradient_list_item"
     android:layout_gravity="center"
     android:minWidth="260dp"
     android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
         android:fontFamily="@font/wallpoet"
         android:padding="10dp"
         android:text="@{game.name}"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:textColor="#8EA8C3"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.048"
@@ -77,7 +77,7 @@
         android:layout_marginTop="40dp"
         android:fontFamily="@font/wallpoet"
         android:text="@{game.rating}"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:textColor="#8EA8C3"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.055"
@@ -107,7 +107,7 @@
                 android:fontFamily="@font/wallpoet"
                 android:padding="5dp"
                 android:text="@{gameInf.description}"
-                android:textColor="@color/design_default_color_primary" />
+                android:textColor="#8EA8C3" />
         </LinearLayout>
     </ScrollView>
 
@@ -118,7 +118,7 @@
         android:layout_marginTop="44dp"
         android:fontFamily="@font/wallpoet"
         android:text="Description"
-        android:textColor="@color/design_default_color_primary_dark"
+        android:textColor="#8EA8C3"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.052"

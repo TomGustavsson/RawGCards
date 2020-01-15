@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape android:shape="oval" xmlns:android="http://schemas.android.com/apk/res/android">
-    <stroke
-        android:width="3dp"
-        android:color="#000" />
-
-    <corners android:radius="10dp"
-        android:topLeftRadius="10dp"
-        android:topRightRadius="10dp"
-        android:bottomLeftRadius="10dp"
-        android:bottomRightRadius="10dp"/>
-
-
-</shape>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+<solid android:color="#161925"/>
+<corners android:radius="20dp"/>
+<padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
+    </shape>

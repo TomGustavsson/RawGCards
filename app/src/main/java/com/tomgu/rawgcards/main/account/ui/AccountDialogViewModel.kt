@@ -25,11 +25,15 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     private var friendsLiveData : MutableLiveData<List<Account>> = MutableLiveData()
 
+    private var friendRequestLiveData: MutableLiveData<List<Account>> = MutableLiveData()
+
     private var sharedGamesLiveData : MutableLiveData<List<Game>> = MutableLiveData()
 
     private var allUsersLiveData : MutableLiveData<List<Account>> = MutableLiveData()
 
     private var currentAccountLiveData: MutableLiveData<Account> = MutableLiveData()
+
+    private var isUploadedLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
      override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
@@ -44,7 +48,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     fun getFriends() {
 
-        accountRepository.retrieveFriends().get().addOnSuccessListener { documentSnapshot ->
+        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
             val account = documentSnapshot.toObject(Account::class.java)
             val friends = account!!.friends
             val allFriends = mutableListOf<Account>()
@@ -68,7 +72,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun acceptFriendRequest(friendUid: String){
-        accountRepository.acceptFriendRequest(friendUid)
+        accountRepository.acceptFriendRequest(friendUid) {
+            isUploadedLiveData.value = it
+        }
     }
 
     fun declineFriendRequest(friendUid: String){
@@ -76,7 +82,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun addFriend(friendUid: String){
-        accountRepository.addFriend(friendUid)
+        accountRepository.addFriend(friendUid) {
+            isUploadedLiveData.value = it
+        }
     }
 
     fun getSharedGames(friendUid: String){
@@ -92,16 +100,40 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun getAllUsers(){
-        accountRepository.database().get()
-            .addOnSuccessListener { documentSnapshot ->
-                val allUsers = mutableListOf<Account>()
-                documentSnapshot.forEach {
-                    val account = it.toObject(Account::class.java)
-                    allUsers.add(account)
-                    allUsersLiveData.value = allUsers
+
+        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
+           var currentUser = it.toObject(Account::class.java)!!
+
+            accountRepository.database().get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val allUsers = mutableListOf<Account>()
+                    documentSnapshot.forEach {
+                        val account = it.toObject(Account::class.java)
+                        if (account != currentUser)
+                            allUsers.add(account)
+                        allUsersLiveData.value = allUsers
+                    }
+                }
+        }
+
+    }
+
+    fun getAllFriendRequests(){
+        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
+            val account = documentSnapshot.toObject(Account::class.java)
+            val friendRequests = account!!.friendRequests
+            val allFriendRequests = mutableListOf<Account>()
+
+            friendRequests!!.forEach {
+                accountRepository.database().document(it).get().addOnSuccessListener {
+                    val friendRequestAccount = it.toObject(Account::class.java)
+                    allFriendRequests.add(friendRequestAccount!!)
+                    friendRequestLiveData.value = allFriendRequests
                 }
             }
+        }
     }
+
 
     fun getGamesLiveData(): LiveData<List<Game>>{
         return sharedGamesLiveData
@@ -117,6 +149,14 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     fun getCurrentAccountLiveData() : LiveData<Account> {
         return currentAccountLiveData
+    }
+
+    fun getFriendRequestLiveData(): LiveData<List<Account>>{
+        return friendRequestLiveData
+    }
+
+    fun getIsUploadedLiveData(): LiveData<Boolean>{
+        return isUploadedLiveData
     }
 
 }

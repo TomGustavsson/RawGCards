@@ -66,7 +66,17 @@ class FriendFragment(val friend: Account): Fragment() {
             }
         })
 
+        viewModel.getIsUploadedLiveData().observe(this, Observer {
+            Log.d("blabla", it.toString())
+            if(it){
+                binding.progressBarFriend.visibility = View.GONE
+            }
+        })
+
         binding.acceptButton.setOnClickListener{
+            binding.acceptButton.visibility = View.GONE
+            binding.declineButton.visibility = View.GONE
+            binding.progressBarFriend.visibility = View.VISIBLE
             viewModel.acceptFriendRequest(friend.uid!!)
         }
 

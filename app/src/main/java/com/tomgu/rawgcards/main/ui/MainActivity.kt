@@ -3,6 +3,7 @@ package com.tomgu.rawgcards.main.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.Switch
@@ -35,11 +36,11 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
     @Inject
     lateinit var vmFactory : AppViewModelFactory
 
-    lateinit var switchCategories : Switch
+    private lateinit var switchCategories : Switch
     lateinit var viewModel: MainViewModel
 
-    lateinit var dialogCategories: DialogCategories
-    lateinit var accountDialog: AccountDialog
+    private lateinit var dialogCategories: DialogCategories
+    private lateinit var accountDialog: AccountDialog
 
     var cardIndex : Int = 0
 
@@ -97,11 +98,14 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
                     openAccountDialog()
                 }
                 R.id.home -> {
-                    supportFragmentManager
-                        .beginTransaction()
-                        .remove(supportFragmentManager.findFragmentById(R.id.frame_layout)!!)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                        .commit()
+                    if (supportFragmentManager.findFragmentById(R.id.frame_layout) != null){
+                        supportFragmentManager
+                            .beginTransaction()
+                            .remove(supportFragmentManager.findFragmentById(R.id.frame_layout)!!)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                            .commit()
+                    }
+
                 }
                 R.id.favourites -> {
                     supportFragmentManager
