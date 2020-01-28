@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -20,48 +22,44 @@ import com.tomgu.rawgcards.databinding.GameListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.gamedialog.GameInfoDialog
+import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_game_list.*
+import kotlinx.android.synthetic.main.fragment_game_list.view.*
 import javax.inject.Inject
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class GameListFragment : Fragment() {
 
     private lateinit var recyclerAdapter: MyBaseAdapter<Game, GameListItemBinding>
 
     @Inject
     lateinit var vmFactory : AppViewModelFactory
-    lateinit var gameInfoDialog: GameInfoDialog
+    lateinit var gameInfoFragment: GameInfoFragment
 
     lateinit var viewModel: GameListViewModel
+    lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_list, container, false)
-    }
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_game_list, container, false)
 
         //Dagger2 Skit
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[GameListViewModel::class.java]
 
-        gameInfoDialog = GameInfoDialog()
+        recyclerView = view.game_list_recyclerview
         initRecyclerView()
         viewModel.getRoomItems()
 
-        viewModel.getLiveDataRoom().observe(this, Observer {
+        viewModel.getLiveDataRoom().observe(viewLifecycleOwner, Observer {
+
 
             Observable.just(it)
                 .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(recyclerAdapter.listItems, it)))
                 }
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     recyclerAdapter.listItems = it.first
@@ -72,26 +70,33 @@ class GameListFragment : Fragment() {
                 })
         })
 
+        return view
     }
 
     private fun initRecyclerView(){
-        game_list_recyclerview.layoutManager = LinearLayoutManager(activity)
+        recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerAdapter = object : MyBaseAdapter<Game, GameListItemBinding>(){
             override fun getLayoutResId(): Int {
                return R.layout.game_list_item
             }
             override fun onBindData(model: Game, dataBinding: GameListItemBinding) {
                 dataBinding.game = model
+                dataBinding.gameListImage.transitionName = "image_transition_" + model.slug
                 dataBinding.gameListRoot.setOnClickListener {
-                    gameInfoDialog.show(fragmentManager!!,"gameInfoDialog")
-                    gameInfoDialog.setGameString(model.slug)
 
+                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model)
+
+                    activity!!.supportFragmentManager
+                        .beginTransaction()
+                        .addSharedElement(dataBinding.gameListImage, dataBinding.gameListImage.transitionName)
+                        .replace(R.id.frame_layout, gameInfoFragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
-
         }
-        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(game_list_recyclerview)
-        game_list_recyclerview.adapter = recyclerAdapter
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView)
+        recyclerView.adapter = recyclerAdapter
     }
 
         //Swipe to delete items

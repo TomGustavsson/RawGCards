@@ -18,9 +18,8 @@ class AccountRepository {
 
     var auth = FirebaseAuth.getInstance()
     var db = FirebaseFirestore.getInstance().collection("Accounts")
-    val authenticatedUserMutableLiveData: MutableLiveData<Account> = MutableLiveData()
 
-    fun firebaseSignInWithGoogle(acct: GoogleSignInAccount): MutableLiveData<Account> {
+    fun firebaseSignInWithGoogle(acct: GoogleSignInAccount, callback: (Account) -> Unit) {
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
 
@@ -38,9 +37,8 @@ class AccountRepository {
                         name.toString(),
                         uid
                     )
-                    authenticatedUserMutableLiveData.value = account
                     Log.d("billyz", account.email)
-
+                    callback.invoke(account)
                     db.document(uid).get()
                         .addOnCompleteListener(OnCompleteListener<DocumentSnapshot?> { task ->
                             if (task.isSuccessful) {
@@ -59,15 +57,12 @@ class AccountRepository {
             } else {
                 Log.d("Billyz", "signInWithCredential:failure", authTask.exception)
             }
-
         }
-        return authenticatedUserMutableLiveData
     }
 
     fun retrieveCurrentAccount(): DocumentReference{
         return db.document(auth.currentUser!!.uid)
     }
-
 
     fun signOut() {
         auth.signOut()
@@ -80,15 +75,27 @@ class AccountRepository {
             account.friendRequests!!.remove(friendUid)
             db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
                 callback.invoke(it.isSuccessful)
+            }.addOnFailureListener {
+                callback.invoke(false)
             }
         }
     }
 
-    fun declineFriendRequest(friendUid: String){
+    fun declineFriendRequest(friendUid: String, callback: (Boolean) -> Unit){
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
             account?.friendRequests!!.remove(friendUid)
             db.document(auth.currentUser!!.uid).set(account)
+        }
+        db.document(friendUid).get().addOnSuccessListener {
+            val account = it.toObject(Account::class.java)
+            account?.friends!!.remove(auth.currentUser!!.uid)
+            db.document(friendUid).set(account).addOnCompleteListener {
+                callback.invoke(it.isSuccessful)
+            }.addOnFailureListener {
+                callback.invoke(false)
+            }
+
         }
     }
 
@@ -104,6 +111,8 @@ class AccountRepository {
             account?.friends!!.add(friendUid)
             db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
                 callback.invoke(it.isSuccessful)
+            }.addOnFailureListener {
+                callback.invoke(false)
             }
         }
     }

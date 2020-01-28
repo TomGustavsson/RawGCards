@@ -3,11 +3,12 @@ package com.tomgu.rawgcards.main.account.ui
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.DialogFragment
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,8 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.MyBaseDiffUtil
+
 import com.tomgu.rawgcards.R
-import com.tomgu.rawgcards.databinding.DialogAccountBinding
+import com.tomgu.rawgcards.databinding.FragmentAccountBinding
 import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.login.LoginActivity
@@ -28,7 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class AccountDialog: DialogFragment() {
+class AccountFragment : Fragment() {
 
     @Inject
     lateinit var vmFactory: AppViewModelFactory
@@ -40,16 +42,12 @@ class AccountDialog: DialogFragment() {
     private lateinit var signOutText: TextView
     private lateinit var friendsRecyclerView: RecyclerView
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val binding : DialogAccountBinding = DialogAccountBinding.inflate(LayoutInflater.from(context))
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding: FragmentAccountBinding = FragmentAccountBinding.inflate(LayoutInflater.from(context))
 
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
-
         friendsRecyclerView= binding.root.findViewById(R.id.friendsRecyclerView) as RecyclerView
         initRecyclerView()
 
@@ -71,7 +69,7 @@ class AccountDialog: DialogFragment() {
         viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
 
             Observable.just(it)
-                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -87,7 +85,7 @@ class AccountDialog: DialogFragment() {
 
         viewModel.getUsersLiveData().observe(this, Observer{
             Observable.just(it)
-                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -103,7 +101,7 @@ class AccountDialog: DialogFragment() {
         viewModel.getFriendRequestLiveData().observe(this, Observer {
 
             Observable.just(it)
-                .map{Pair(it,DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -141,20 +139,19 @@ class AccountDialog: DialogFragment() {
     private fun initRecyclerView() {
         friendsRecyclerView.layoutManager = LinearLayoutManager(activity)
         friendsAdapter = object : MyBaseAdapter<Account, FriendListItemBinding>() {
-                override fun getLayoutResId(): Int {
-                    return R.layout.friend_list_item
+            override fun getLayoutResId(): Int {
+                return R.layout.friend_list_item
+            }
+            override fun onBindData(model: Account, dataBinding: FriendListItemBinding) {
+                dataBinding.account = model
+                dataBinding.root.setOnClickListener {
+                    val friendFragment = FriendFragment(model)
+                    val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                    friendFragment.tag
+                    fragmentTransaction.replace(R.id.frame_layout, friendFragment)
+                    fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
+                    fragmentTransaction.commit()
                 }
-                override fun onBindData(model: Account, dataBinding: FriendListItemBinding) {
-                    dataBinding.account = model
-                    dataBinding.root.setOnClickListener {
-                        dismiss()
-                        val friendFragment = FriendFragment(model)
-                        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                        friendFragment.tag
-                        fragmentTransaction.replace(R.id.frame_layout, friendFragment)
-                        fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
-                        fragmentTransaction.commit()
-                    }
             }
         }
         friendsRecyclerView.adapter = friendsAdapter
@@ -166,3 +163,5 @@ class AccountDialog: DialogFragment() {
 
 
 }
+
+

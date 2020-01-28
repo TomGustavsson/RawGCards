@@ -1,48 +1,46 @@
 package com.tomgu.rawgcards.main.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.CompoundButton
-import android.widget.ImageView
 import android.widget.Switch
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.tomgu.rawgcards.R
-import com.tomgu.rawgcards.main.CardStackAdapter
-import com.wenchao.cardstack.CardStack
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
+import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.account.Account
-import com.tomgu.rawgcards.main.account.ui.AccountDialog
+import com.tomgu.rawgcards.login.LoginActivity
+import com.tomgu.rawgcards.login.LoginFragment
+import com.tomgu.rawgcards.main.CardStackAdapter
+import com.tomgu.rawgcards.main.account.ui.AccountFragment
 import com.tomgu.rawgcards.main.categoriedialog.Categorie
 import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
+import com.wenchao.cardstack.CardStack
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
 
-    private var card_stack: CardStack? = null
-    private var card_adapter: CardStackAdapter? = null
+class MainActivity : AppCompatActivity() {
 
     lateinit var favouritesFragment : GameListFragment
 
     @Inject
     lateinit var vmFactory : AppViewModelFactory
 
-    private lateinit var switchCategories : Switch
+
     lateinit var viewModel: MainViewModel
 
-    private lateinit var dialogCategories: DialogCategories
-    private lateinit var accountDialog: AccountDialog
-
-    var cardIndex : Int = 0
+    private lateinit var cardStackFragment: CardStackFragment
+    private lateinit var accountFragment: Fragment
+    private lateinit var loginFragment: LoginFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,55 +52,48 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val bottomNavigationView : BottomNavigationView = findViewById(R.id.bottom_nav_bar)
-        val reverseFab : FloatingActionButton = findViewById(R.id.reverseFab)
 
-        //viewModel.addFriend()
-
-        viewModel.getHashMapFromPreferences()
-
-        switchCategories = findViewById(R.id.switchCategories)
         favouritesFragment = GameListFragment()
-        dialogCategories = DialogCategories()
-        accountDialog = AccountDialog()
+        cardStackFragment = CardStackFragment()
+        accountFragment = AccountFragment()
+        loginFragment = LoginFragment()
 
-        //Open dialog with switch object
-        val com = object : CompoundButton.OnCheckedChangeListener{
-            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-                if(p1){
-                    dialogCategories.show(supportFragmentManager,"gameInfoDialog")
-                } else{
-                    Log.d("switcher", "Switch is disabled")
-                }
-            }
-        }
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.frame_layout, cardStackFragment)
+            .addToBackStack("cardStackFragment")
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .commit()
 
-        //viewModel.getCurrentAccount()
-
-        switchCategories.setOnCheckedChangeListener(com)
-
-        //Reverse Button
-        reverseFab.setOnClickListener {
-            reverseFab.animate().rotation(reverseFab.getRotation()-360).start()
-            viewModel.resetAllPages()
-            card_adapter!!.clear()
-            viewModel.getApiItems()
-            card_stack!!.reset(true)
-            cardIndex = 0
-        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener {
 
             when(it.itemId){
 
                 R.id.account -> {
-                    openAccountDialog()
+                    if(intent.getStringExtra("account") == "guest"){
+                       supportFragmentManager
+                           .beginTransaction()
+                           .replace(R.id.frame_layout, loginFragment)
+                           .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                           .addToBackStack(null)
+                           .commit()
+                    }else {
+                        supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.frame_layout, accountFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
                 R.id.home -> {
                     if (supportFragmentManager.findFragmentById(R.id.frame_layout) != null){
                         supportFragmentManager
                             .beginTransaction()
-                            .remove(supportFragmentManager.findFragmentById(R.id.frame_layout)!!)
+                            .replace(R.id.frame_layout, cardStackFragment)
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                            .addToBackStack("cardStackFragment")
                             .commit()
                     }
 
@@ -112,6 +103,7 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
                         .beginTransaction()
                         .replace(R.id.frame_layout, favouritesFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
                         .commit()
                 }
 
@@ -119,73 +111,6 @@ class MainActivity : AppCompatActivity(), CardStack.CardEventListener {
             true
         }
 
-        card_adapter = CardStackAdapter(applicationContext, 0)
-
-        card_stack = findViewById(R.id.card_stack)
-        card_stack!!.setContentResource(R.layout.card_layout)
-        card_stack!!.setStackMargin(20)
-        card_stack!!.setAdapter(card_adapter!!)
-
-        card_stack!!.setListener(this)
-
-        viewModel.getApiItems()
-
-        viewModel.getLiveData().observe(this, Observer {
-            for(game in it.games)
-            card_adapter!!.add(game)
-        })
-
-
     }
 
-
-    override fun swipeEnd(i: Int, v: Float): Boolean {
-
-        if (i == 1 || i == 3){
-            viewModel.setSaveGameList(card_adapter!!.getItem(card_stack!!.currIndex))
-            cardIndex ++
-        } else {
-            cardIndex ++
-        }
-        if(cardIndex >= 18){
-            viewModel.incrementCurrentPage()
-            viewModel.getApiItems()
-            cardIndex = 0
-        }
-
-        return v > 300
-    }
-
-    override fun swipeStart(i: Int, v: Float): Boolean {
-        return false
-    }
-
-    override fun swipeContinue(i: Int, v: Float, v1: Float): Boolean {
-        return false
-    }
-
-    override fun discarded(i: Int, i1: Int) {
-
-    }
-
-    override fun topCardTapped() {
-
-    }
-
-    fun changeSwitch(categorie: Categorie){
-        switchToggle()
-        card_adapter!!.clear()
-        viewModel.setCategorieToApi(categorie.name)
-        viewModel.getApiItems()
-        card_stack!!.reset(true)
-        cardIndex = 0
-    }
-
-    fun switchToggle(){
-        switchCategories.toggle()
-    }
-
-    fun openAccountDialog(){
-        accountDialog.show(supportFragmentManager, "accountDialog")
-    }
 }

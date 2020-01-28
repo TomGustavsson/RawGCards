@@ -19,6 +19,7 @@ abstract class MyBaseAdapter<T, D : ViewDataBinding>: RecyclerView.Adapter<MyBas
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate(layoutInflater, getLayoutResId(), parent, false) as D
 
+
         return MyViewHolder(binding)
     }
 

@@ -1,6 +1,9 @@
 package com.tomgu.rawgcards.main.categoriedialog
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.text.format.DateUtils.getMonthString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.CategorieListItemBinding
 import com.tomgu.rawgcards.main.MyBaseAdapter
-import com.tomgu.rawgcards.main.ui.MainActivity
+
 
 class DialogCategories: DialogFragment() {
 
@@ -60,9 +63,14 @@ class DialogCategories: DialogFragment() {
             override fun onBindData(model: Categorie, dataBinding: CategorieListItemBinding) {
                 dataBinding.categorie = model
                 dataBinding.categorieRoot.setOnClickListener {
-                    var mainActivity: MainActivity = activity as MainActivity
+                    val i: Intent = Intent()
+                        .putExtra("categorie", model.name)
+                    targetFragment!!.onActivityResult(
+                        targetRequestCode,
+                        Activity.RESULT_OK,
+                        i
+                    )
                     dismiss()
-                    mainActivity.changeSwitch(model)
                 }
             }
         }
@@ -70,30 +78,5 @@ class DialogCategories: DialogFragment() {
         categoriesRecyclerAdapter.listItems = categories
     }
 
-    /*
-    //Swipe to delete items
-    val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
-        0,
-        ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
-    ) {
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean {
-            return false
-        }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            //game categorie selected
-            var categorie = viewHolder.adapterPosition
-
-            var mainActivity: MainActivity = activity as MainActivity
-            dismiss()
-            mainActivity.changeSwitch(categoriesRecyclerAdapter.getItem(categorie))
-
-
-        }
-
-    }*/
 }

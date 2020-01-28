@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.gamedialog
+package com.tomgu.rawgcards.main.gameinfofrag
 
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +17,6 @@ import com.tomgu.rawgcards.R
 import io.reactivex.Observable
 import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel

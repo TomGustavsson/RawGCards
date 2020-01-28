@@ -78,7 +78,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun declineFriendRequest(friendUid: String){
-        accountRepository.declineFriendRequest(friendUid)
+        accountRepository.declineFriendRequest(friendUid) {
+            isUploadedLiveData.value = it
+        }
     }
 
     fun addFriend(friendUid: String){

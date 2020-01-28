@@ -118,17 +118,4 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         return myMap.get("4")!!
     }
 
-    /*fun getCurrentAccount(){
-        accountRepository.getCurrentAccount()
-    }*/
-
-    /*fun getCurrentAccountLiveData() : LiveData<Account> {
-        return accountRepository.currentAccountMutableLiveData
-    }
-
-    fun addFriend(){
-        accountRepository.addFriend()
-    }*/
-
-
 }

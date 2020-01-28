@@ -51,7 +51,7 @@
                     android:scaleType="centerCrop"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:loadImage="@{game.background_image}" />
+                    app:loadImage="@{game.background_image}"/>
             </com.github.florent37.diagonallayout.DiagonalLayout>
 
             <LinearLayout

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -21,6 +22,7 @@ import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -34,6 +36,7 @@ class FriendFragment(val friend: Account): Fragment() {
     lateinit var viewModel: AccountDialogViewModel
 
     lateinit var recyclerView : RecyclerView
+    lateinit var gameInfoFragment: GameInfoFragment
 
     lateinit var adapter: MyBaseAdapter<Game, GameListItemBinding>
 
@@ -51,25 +54,26 @@ class FriendFragment(val friend: Account): Fragment() {
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
 
             if(it.friendRequests!!.contains(friend.uid)){
-
+                recyclerView.visibility = View.GONE
                 binding.acceptButton.visibility = View.VISIBLE
                 binding.declineButton.visibility = View.VISIBLE
 
             } else if(it.friends!!.contains(friend.uid)){
-
-                Log.d("Greken", "Already Friends")
+                recyclerView.visibility = View.VISIBLE
 
             } else {
-
+                recyclerView.visibility = View.GONE
                 binding.addFriendImage.visibility = View.VISIBLE
 
             }
         })
 
         viewModel.getIsUploadedLiveData().observe(this, Observer {
-            Log.d("blabla", it.toString())
-            if(it){
+            if(it == true){
                 binding.progressBarFriend.visibility = View.GONE
+                viewModel.getCurrentAccount()
+            } else {
+                Toast.makeText(activity,"Something went wrong", Toast.LENGTH_LONG).show()
             }
         })
 
@@ -78,10 +82,14 @@ class FriendFragment(val friend: Account): Fragment() {
             binding.declineButton.visibility = View.GONE
             binding.progressBarFriend.visibility = View.VISIBLE
             viewModel.acceptFriendRequest(friend.uid!!)
+
         }
 
         binding.declineButton.setOnClickListener{
             viewModel.declineFriendRequest(friend.uid!!)
+            binding.acceptButton.visibility = View.GONE
+            binding.declineButton.visibility = View.GONE
+            binding.progressBarFriend.visibility = View.VISIBLE
         }
 
         binding.addFriendImage.setOnClickListener{
@@ -117,6 +125,18 @@ class FriendFragment(val friend: Account): Fragment() {
             }
             override fun onBindData(model: Game, dataBinding: GameListItemBinding) {
                 dataBinding.game = model
+                dataBinding.gameListImage.transitionName = "image_transition_" + model.slug
+                dataBinding.gameListRoot.setOnClickListener {
+
+                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model)
+
+                    activity!!.supportFragmentManager
+                        .beginTransaction()
+                        .addSharedElement(dataBinding.gameListImage, dataBinding.gameListImage.transitionName)
+                        .replace(R.id.frame_layout, gameInfoFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
         recyclerView.adapter = adapter
