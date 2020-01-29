@@ -1,5 +1,6 @@
 package com.tomgu.rawgcards.main.gameinfofrag
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.transition.*
 import android.util.Log
@@ -7,10 +8,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomgu.rawgcards.AppViewModelFactory
 
@@ -50,12 +53,16 @@ class GameInfoFragment : Fragment() {
         val toolbar = binding.toolbar
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        if((activity as AppCompatActivity).supportActionBar != null){
-            (activity as AppCompatActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        }
 
-        //viewModel.getRoomObject(gameSlug)
+        //scrolling animation
+        binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
+
+            var slideOffset = offset * -1f
+            binding.diagonalTriangle.offset = slideOffset / appBarLayout.totalScrollRange
+
+        })
+
         viewModel.getApiInfo(gameSlug)
 
         shareButton.setOnClickListener {
@@ -64,10 +71,6 @@ class GameInfoFragment : Fragment() {
         }
 
         binding.game = gameShare
-        /*viewModel.getLiveDataRoom().observe(this, Observer {
-            gameShare = it
-            binding.game = it
-        })*/
 
         viewModel.getLiveDataApi().observe(this, Observer {
             binding.gameInf = it
