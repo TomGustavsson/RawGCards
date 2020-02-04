@@ -30,7 +30,7 @@ class DiagonalTriangle(context: Context, attributeSet: AttributeSet): View(conte
         myPath.moveTo(0f, canvasHeight)
         myPath.lineTo(canvasWidth, canvasHeight)
         myPath.lineTo(canvasWidth, 0f)
-        myPath.lineTo(0f,animatedY)
+        myPath.lineTo(0f,animatedY - (canvasHeight / 2))
         myPath.close()
 
         canvas?.drawPath(myPath, paint)

@@ -89,6 +89,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         for(entry in myMap.entries){
             myMap.put(entry.key,1)
         }
+        saveHashMap()
     }
 
     private fun saveHashMap(){

@@ -7,6 +7,8 @@ import com.tomgu.rawgcards.login.LoginViewModel
 import com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel
 import com.tomgu.rawgcards.main.account.ui.AccountFragment
 import com.tomgu.rawgcards.main.account.ui.FriendFragment
+import com.tomgu.rawgcards.main.categoriedialog.CategorieFragment
+import com.tomgu.rawgcards.main.categoriedialog.CategorieViewModel
 import com.tomgu.rawgcards.main.gameinfofrag.BottomSheetDialog
 import com.tomgu.rawgcards.main.gameinfofrag.GIDViewModel
 import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
@@ -51,6 +53,10 @@ interface AppComponent {
     fun inject(accountFragment: AccountFragment)
 
     fun inject(loginFragment: LoginFragment)
+
+    fun inject(categorieFragment: CategorieFragment)
+
+    fun inject(categorieViewModel: CategorieViewModel)
 
     fun appViewModelFactory(): AppViewModelFactory
 

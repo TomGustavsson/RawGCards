@@ -127,7 +127,20 @@ class AccountRepository {
 
     fun uploadGameToFriend(game: Game, friendUid: String) {
         db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
-            .collection("SharedGames").document().set(game)
+            .collection("SharedGames").get().addOnSuccessListener {
+                var gameDocuments = mutableListOf<String>()
+                it.forEach {
+                    gameDocuments.add(it.id)
+                }
+                if(gameDocuments.contains(game.slug)){
+                    Log.d("tgiwError","User already shared this game")
+                } else {
+
+                    db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
+                        .collection("SharedGames").document(game.slug).set(game)
+                }
+
+            }
     }
 
 

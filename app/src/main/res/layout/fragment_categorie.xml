@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="8"
+            android:columnCount="2"
+            android:padding="2dp"
+            android:rowCount="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:context=".main.categoriedialog.CategorieFragment">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="Action" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categorieAction"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="Fighting" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categorieFighting"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="Racing" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categorieRacing"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="Shooting" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categorieShooting"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="RPG" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categorieRPG"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:text="Platform" />
+
+                <com.tomgu.rawgcards.CategorieShape
+                    android:id="@+id/categoriePlatform"
+                    android:layout_width="160dp"
+                    android:layout_height="210dp"
+                    android:padding="3dp" />
+            </LinearLayout>
+
+
+        </GridLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

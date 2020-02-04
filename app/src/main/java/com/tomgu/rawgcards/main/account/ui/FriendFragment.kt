@@ -128,7 +128,7 @@ class FriendFragment(val friend: Account): Fragment() {
                 dataBinding.gameListImage.transitionName = "image_transition_" + model.slug
                 dataBinding.gameListRoot.setOnClickListener {
 
-                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model)
+                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model, friend.uid!!)
 
                     activity!!.supportFragmentManager
                         .beginTransaction()

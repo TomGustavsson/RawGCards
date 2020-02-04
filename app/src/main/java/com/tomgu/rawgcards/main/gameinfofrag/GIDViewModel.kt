@@ -18,6 +18,9 @@ class GIDViewModel: ViewModel(), AppComponent.Injectable {
     @Inject
     lateinit var gameRepository: GameRepository
 
+    @Inject
+    lateinit var accountRepository: AccountRepository
+
     private val disposables = CompositeDisposable()
 
     //Live data for room
@@ -59,4 +62,14 @@ class GIDViewModel: ViewModel(), AppComponent.Injectable {
         return gameInfoLiveData
     }
 
-}
+    fun saveSharedGame(friendUid: String, game: Game){
+        //Remove game from shared game list
+        accountRepository.retrieveSharedGames().document(friendUid).collection("SharedGames").document(game.slug).delete()
+
+        //save in local database
+        gameRepository.insert(game)
+
+        }
+
+
+    }

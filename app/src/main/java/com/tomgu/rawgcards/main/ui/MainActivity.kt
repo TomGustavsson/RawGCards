@@ -58,6 +58,11 @@ class MainActivity : AppCompatActivity() {
         accountFragment = AccountFragment()
         loginFragment = LoginFragment()
 
+        val defaultArgument = Bundle()
+        defaultArgument.putString("Categorie", "Racing")
+        defaultArgument.putString("TransitionName", "image_content")
+        cardStackFragment.arguments = defaultArgument
+
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.frame_layout, cardStackFragment)

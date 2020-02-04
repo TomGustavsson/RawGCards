@@ -6,9 +6,6 @@
         <variable
             name="game"
             type="com.tomgu.rawgcards.main.api.Game" />
-        <variable
-            name="appUtils"
-            type="com.tomgu.rawgcards.AppUtils" />
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

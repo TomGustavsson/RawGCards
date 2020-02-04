@@ -6,4 +6,6 @@
     <color name="colorPrimaryLighter">#b3b3b3</color>
     <color name="colorAccent">#CBF7ED</color>
     <color name="colorBackground">#23395B</color>
+    <color name="headerColor">#8EA8C3</color>
+    <color name="whiteBackground">#fff</color>
 </resources>

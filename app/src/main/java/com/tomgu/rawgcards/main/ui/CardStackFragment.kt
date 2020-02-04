@@ -1,25 +1,26 @@
 package com.tomgu.rawgcards.main.ui
 
-import android.R.attr
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.transition.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Switch
+import androidx.core.view.doOnPreDraw
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
+import com.tomgu.rawgcards.databinding.FragmentCardStackBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.CardStackAdapter
-import com.tomgu.rawgcards.main.categoriedialog.Categorie
-import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
+import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.main.categoriedialog.CategorieFragment
 import com.wenchao.cardstack.CardStack
 import javax.inject.Inject
 
@@ -35,30 +36,43 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
     private lateinit var switchCategories : Switch
     lateinit var viewModel: MainViewModel
 
-    private lateinit var dialogCategories: DialogCategories
-    val DATEPICKER_FRAGMENT = 1
-
+    lateinit var categorieName: String
     var cardIndex : Int = 0
+    var game: Game? = null
+
+    private lateinit var categorieFragment: Fragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_card_stack, container, false)
+        val binding: FragmentCardStackBinding = FragmentCardStackBinding.inflate(LayoutInflater.from(context))
         //Dagger2 skit
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
-        val reverseFab : FloatingActionButton = view.findViewById(R.id.reverseFab)
+        val reverseFab : FloatingActionButton = binding.reverseFab
 
         viewModel.getHashMapFromPreferences()
+        categorieName = arguments!!.getString("Categorie")!!
+        viewModel.setCategorieToApi(categorieName)
 
-        switchCategories = view.findViewById(R.id.switchCategories)
+        if(arguments!!.getSerializable("Game") != null)
+        game = arguments!!.getSerializable("Game") as Game
 
-        //Open dialog with switch object
+
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        postponeEnterTransition()
+
+        switchCategories = binding.switchCategories
+
+        //Open categorie fragment
         val com = object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
                 if(p1){
-                    dialogCategories = DialogCategories()
-                    dialogCategories.setTargetFragment(this@CardStackFragment, DATEPICKER_FRAGMENT)
-                    dialogCategories.show(fragmentManager!!,"gameInfoDialog")
+                    categorieFragment = CategorieFragment.newInstance(viewModel.getHashMap())
+                    activity!!.supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.frame_layout, categorieFragment)
+                        .addToBackStack(null)
+                        .commit()
                 } else{
                     Log.d("switcher", "Switch is disabled")
                 }
@@ -79,7 +93,7 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
 
         card_adapter = CardStackAdapter(context!!, 0)
 
-        card_stack = view.findViewById(R.id.card_stack)
+        card_stack = binding.cardStack
         card_stack!!.setContentResource(R.layout.card_layout)
         card_stack!!.setStackMargin(20)
         card_stack!!.setAdapter(card_adapter!!)
@@ -93,22 +107,17 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
             it.games.forEach {
                 card_adapter!!.add(it)
             }
+
+            (card_stack as? ViewGroup)?.doOnPreDraw {
+                // Parent has been drawn. Start transitioning!
+                startPostponedEnterTransition()}
+
         })
 
+        binding.game = game
 
-        return view
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when(requestCode){
-            DATEPICKER_FRAGMENT -> if(resultCode == Activity.RESULT_OK){
-
-                val bundle: Bundle = data!!.extras!!
-                val categorieName = bundle.getString("categorie")
-                changeSwitch(categorieName!!)
-            }
-        }
-
+        return binding.root
     }
 
     override fun swipeEnd(i: Int, v: Float): Boolean {
@@ -144,17 +153,30 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
 
     }
 
-    fun changeSwitch(categorieName : String){
-        switchToggle()
-        card_adapter!!.clear()
-        viewModel.setCategorieToApi(categorieName)
-        viewModel.getApiItems()
-        card_stack!!.reset(true)
-        cardIndex = 0
+    companion object{
+
+        fun newInstance(categorie: String, transName: String, game: Game): CardStackFragment{
+            val cardStackFragment = CardStackFragment()
+
+            val arguments = Bundle()
+            arguments.putString("Categorie", categorie)
+            arguments.putString("Trans", transName)
+            arguments.putSerializable("Game", game)
+
+            val transitionSet = TransitionSet()
+
+            transitionSet.addTransition(ChangeBounds())
+            transitionSet.addTransition(ChangeTransform())
+            transitionSet.addTransition(ChangeImageTransform())
+
+            cardStackFragment.sharedElementEnterTransition = transitionSet
+
+            cardStackFragment.arguments = arguments
+
+            return cardStackFragment
+        }
     }
 
-    fun switchToggle(){
-        switchCategories.toggle()
-    }
 }
+
 

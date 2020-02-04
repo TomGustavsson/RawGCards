@@ -1,6 +1,8 @@
 package com.tomgu.rawgcards.main.account.ui
 
+import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,6 +27,7 @@ import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.login.LoginActivity
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
+import com.tomgu.rawgcards.main.gameinfofrag.BottomSheetDialog
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,11 +39,7 @@ class AccountFragment : Fragment() {
     lateinit var vmFactory: AppViewModelFactory
 
     lateinit var viewModel: AccountDialogViewModel
-
-    private lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
-
-    private lateinit var signOutText: TextView
-    private lateinit var friendsRecyclerView: RecyclerView
+    lateinit var bottomSheetDialog: BottomSheetDialog
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -48,120 +47,54 @@ class AccountFragment : Fragment() {
 
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
-        friendsRecyclerView= binding.root.findViewById(R.id.friendsRecyclerView) as RecyclerView
-        initRecyclerView()
 
-        signOutText = binding.root.findViewById(R.id.signOutTextView)
+        binding.emailTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.usersTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         viewModel.getCurrentAccount()
-        friends()
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
-
-            if (it.friendRequests!!.size == 0){
-                binding.friendRoot.visibility = View.GONE
-            } else {
-                binding.requestCountTextView.setText(it.friendRequests!!.size.toString())
-            }
+            binding.requestCount.setText(it.friendRequests!!.size.toString())
+        })
+        viewModel.getFriends()
+        viewModel.getFriendsLiveData().observe(this, Observer {
+            binding.friendsCount.setText(it.size.toString())
+        })
+        viewModel.getAllUsers()
+        viewModel.getUsersLiveData().observe(this, Observer {
+            binding.usersCount.setText(it.size.toString())
         })
 
-        viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
-
-            Observable.just(it)
-                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    friendsAdapter.listItems = it.first
-                    it.second.dispatchUpdatesTo(friendsAdapter)
-                    Log.d("greken", it.toString())
-
-                },{
-                    Log.d("tgiw", it.toString())
-                })
-        })
-
-        viewModel.getUsersLiveData().observe(this, Observer{
-            Observable.just(it)
-                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    friendsAdapter.listItems = it.first
-                    it.second.dispatchUpdatesTo(friendsAdapter)
-
-                },{
-                    Log.d("tgiw", it.toString())
-                })
-        })
-
-        viewModel.getFriendRequestLiveData().observe(this, Observer {
-
-            Observable.just(it)
-                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    friendsAdapter.listItems = it.first
-                    it.second.dispatchUpdatesTo(friendsAdapter)
-
-                },{
-                    Log.d("tgiw", it.toString())
-                })
-        })
 
         binding.usersTextView.setOnClickListener {
-            viewModel.getAllUsers()
+            bottomSheetDialog = BottomSheetDialog.newInstance(null,"USERS", "NOSHARE")
+            bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
         binding.friendsTextView.setOnClickListener {
-            friends()
+            bottomSheetDialog = BottomSheetDialog.newInstance(null,"FRIENDS", "NOSHARE")
+            bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
-        signOutText.setOnClickListener {
+        binding.signOutButton.setOnClickListener {
             viewModel.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
 
-
-        //Friend Request button
-        binding.friendRoot.setOnClickListener{
-            viewModel.getAllFriendRequests()
+        binding.requestText.setOnClickListener {
+            bottomSheetDialog = BottomSheetDialog.newInstance(null, "REQUESTS", "NOSHARE")
+            bottomSheetDialog.show(fragmentManager!!, " bottomsheetDialog")
         }
+
+        ObjectAnimator.ofInt(binding.progressBarGames, "progress", 50)
+            .setDuration(3000)
+            .start()
 
         return binding.root
     }
-    private fun initRecyclerView() {
-        friendsRecyclerView.layoutManager = LinearLayoutManager(activity)
-        friendsAdapter = object : MyBaseAdapter<Account, FriendListItemBinding>() {
-            override fun getLayoutResId(): Int {
-                return R.layout.friend_list_item
-            }
-            override fun onBindData(model: Account, dataBinding: FriendListItemBinding) {
-                dataBinding.account = model
-                dataBinding.root.setOnClickListener {
-                    val friendFragment = FriendFragment(model)
-                    val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                    friendFragment.tag
-                    fragmentTransaction.replace(R.id.frame_layout, friendFragment)
-                    fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
-                    fragmentTransaction.commit()
-                }
-            }
-        }
-        friendsRecyclerView.adapter = friendsAdapter
-    }
-
-    private fun friends(){
-        viewModel.getFriends()
-    }
-
-
 }
 
 

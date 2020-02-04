@@ -55,7 +55,6 @@ class GameListFragment : Fragment() {
 
         viewModel.getLiveDataRoom().observe(viewLifecycleOwner, Observer {
 
-
             Observable.just(it)
                 .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(recyclerAdapter.listItems, it)))
                 }
@@ -84,7 +83,7 @@ class GameListFragment : Fragment() {
                 dataBinding.gameListImage.transitionName = "image_transition_" + model.slug
                 dataBinding.gameListRoot.setOnClickListener {
 
-                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model)
+                    gameInfoFragment = GameInfoFragment.newInstance(model.slug,dataBinding.gameListImage.transitionName, model, "NoFriend")
 
                     activity!!.supportFragmentManager
                         .beginTransaction()
