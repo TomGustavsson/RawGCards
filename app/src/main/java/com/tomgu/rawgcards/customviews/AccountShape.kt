@@ -1,9 +1,10 @@
-package com.tomgu.rawgcards
+package com.tomgu.rawgcards.customviews
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.tomgu.rawgcards.R
 
 
 class AccountShape(context: Context, attributeSet: AttributeSet): View(context, attributeSet) {

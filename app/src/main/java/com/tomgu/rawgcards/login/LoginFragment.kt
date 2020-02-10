@@ -1,8 +1,6 @@
 package com.tomgu.rawgcards.login
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,8 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.tomgu.rawgcards.AppViewModelFactory
-
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FragmentLoginBinding
 import com.tomgu.rawgcards.di.AppApplication
@@ -59,6 +57,15 @@ class LoginFragment : Fragment() {
         userText = binding.userTextView
         progressBar = binding.loginProgresBar
 
+        Log.d("TGIW", viewModel.getCurrentAccount().toString())
+
+        if(viewModel.getCurrentAccount() != null) {
+
+            val intent = Intent(activity, MainActivity::class.java)
+            intent.putExtra("account", "verified")
+            startActivity(intent)
+        }
+
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -76,6 +83,7 @@ class LoginFragment : Fragment() {
         }
 
         signInGuest.setOnClickListener{
+
             val intent = Intent(activity, MainActivity::class.java)
             intent.putExtra("account", "guest")
             startActivity(intent)
@@ -98,6 +106,12 @@ class LoginFragment : Fragment() {
         startActivityForResult(signInIntent, GOOGLE_SIGN)
     }
 
+    fun snackBar(){
+
+        val snackbar = Snackbar.make(binding.loginBackground, "Google sign in failed", Snackbar.LENGTH_INDEFINITE)
+        snackbar.show()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -110,6 +124,10 @@ class LoginFragment : Fragment() {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("Billyz", "Google sign in failed", e)
+               // val snackbar = Snackbar.make(binding.loginBackground, "Google sign in failed", Snackbar.LENGTH_INDEFINITE)
+              //  snackbar.show()
+                progressBar.visibility = View.GONE
+                button.visibility = View.VISIBLE
                 // ...
             }
         }

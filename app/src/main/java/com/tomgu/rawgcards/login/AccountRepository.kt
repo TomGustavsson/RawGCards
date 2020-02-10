@@ -6,6 +6,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -58,6 +59,10 @@ class AccountRepository {
                 Log.d("Billyz", "signInWithCredential:failure", authTask.exception)
             }
         }
+    }
+
+    fun getCurrentUser(): FirebaseUser?{
+        return auth.currentUser
     }
 
     fun retrieveCurrentAccount(): DocumentReference{

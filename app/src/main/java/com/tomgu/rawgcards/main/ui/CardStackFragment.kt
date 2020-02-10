@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.cardstack.CardStackListener
@@ -26,7 +27,6 @@ import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.CardStackAdapter
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.categoriedialog.CategorieFragment
-import com.wenchao.cardstack.CardStack
 import javax.inject.Inject
 
 
@@ -42,7 +42,6 @@ class CardStackFragment : Fragment(), CardStackListener {
     var game: Game? = null
 
     lateinit var myCardStack: MyCardStack
-    val cardSize = Constraints.LayoutParams(900,1400)
 
     private lateinit var categorieFragment: Fragment
 
@@ -93,6 +92,17 @@ class CardStackFragment : Fragment(), CardStackListener {
         }
 
         viewModel.getApiItems()
+        viewModel.isApiFailed.observe(this, Observer {
+            if(it == true){
+                val snackbar = Snackbar.make(binding.cardStackBackground, "Couldn't load games", Snackbar.LENGTH_INDEFINITE)
+                snackbar.setAction("Refresh", {
+                    snackbar.dismiss()
+                    viewModel.getApiItems()
+                })
+                snackbar.show()
+        }
+        })
+
 
         myCardStack = binding.myCardStack
 

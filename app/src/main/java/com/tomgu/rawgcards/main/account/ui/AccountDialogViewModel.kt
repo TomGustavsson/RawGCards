@@ -33,6 +33,8 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     private var currentAccountLiveData: MutableLiveData<Account> = MutableLiveData()
 
+    val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
+
     private var isUploadedLiveData: MutableLiveData<Boolean> = MutableLiveData()
 
      override fun inject(appComponent: AppComponent) {
@@ -60,6 +62,8 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
                     friendsLiveData.value = allFriends
                 }
             }
+        } . addOnFailureListener {
+            isApiFailed.value = true
         }
     }
 
@@ -98,6 +102,8 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
                     allGames.add(game)
                     sharedGamesLiveData.value = allGames
                 }
+            }. addOnFailureListener {
+                isApiFailed.value = true
             }
     }
 
@@ -115,6 +121,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
                             allUsers.add(account)
                         allUsersLiveData.value = allUsers
                     }
+                }
+                .addOnFailureListener {
+                    isApiFailed.value = true
                 }
         }
 
@@ -134,6 +143,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
                 }
             }
         }
+            .addOnFailureListener {
+                isApiFailed.value = true
+            }
     }
 
 

@@ -29,6 +29,8 @@ class GIDViewModel: ViewModel(), AppComponent.Injectable {
     //Live data for API
     private val gameInfoLiveData : MutableLiveData<GameInfo> = MutableLiveData()
 
+    val isApiError : MutableLiveData<Boolean> = MutableLiveData(false)
+
     override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
     }
@@ -40,9 +42,11 @@ class GIDViewModel: ViewModel(), AppComponent.Injectable {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 gameInfoLiveData.value = it
+                isApiError.value = false
 
             },{
                 Log.d("tgiwe", it.toString())
+                isApiError.value = true
             }))
     }
 

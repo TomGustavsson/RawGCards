@@ -43,7 +43,7 @@
                         app:loadImage="@{game.background_image}"
                         android:transitionName="game_transition"/>
 
-                        <com.tomgu.rawgcards.DiagonalTriangle
+                        <com.tomgu.rawgcards.customviews.DiagonalTriangle
                             android:id="@+id/diagonalTriangle"
                             android:layout_width="match_parent"
                             android:layout_height="135dp"

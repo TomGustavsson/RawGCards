@@ -117,7 +117,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         return view
     }
 
-    fun initRecyclerView(){
+    private fun initRecyclerView(){
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(activity)
         friendsAdapter = object : MyBaseAdapter<Account, FriendListItemBinding>() {
             override fun getLayoutResId(): Int {

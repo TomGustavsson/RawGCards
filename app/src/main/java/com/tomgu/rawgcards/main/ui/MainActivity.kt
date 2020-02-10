@@ -1,30 +1,17 @@
 package com.tomgu.rawgcards.main.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.CompoundButton
-import android.widget.Switch
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.login.LoginActivity
 import com.tomgu.rawgcards.login.LoginFragment
-import com.tomgu.rawgcards.main.CardStackAdapter
 import com.tomgu.rawgcards.main.account.ui.AccountFragment
-import com.tomgu.rawgcards.main.categoriedialog.Categorie
-import com.tomgu.rawgcards.main.categoriedialog.DialogCategories
 import com.tomgu.rawgcards.main.gamefragment.GameListFragment
-import com.wenchao.cardstack.CardStack
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 

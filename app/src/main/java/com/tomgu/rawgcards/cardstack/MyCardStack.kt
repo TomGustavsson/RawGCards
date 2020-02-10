@@ -35,7 +35,6 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
                  card.setCardGame(game)
                  addView(card)
                  gameList.remove(game)
-                     Log.d("TGIW", index.toString())
                      if(index == 2){
                          card.image_content.transitionName = "image_trans"
                      }

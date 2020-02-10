@@ -2,6 +2,7 @@ package com.tomgu.rawgcards.main.ui
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,8 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
     @Inject
     lateinit var pagePreferences: SharedPreferences
 
+    val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
+
     private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
 
     var categorie : String = "1"
@@ -54,9 +57,11 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 responseLiveData.value = it
+                isApiFailed.value = false
 
             },{
                 Log.d("tgiwe", it.toString())
+                isApiFailed.value = true
             }))
 
     }

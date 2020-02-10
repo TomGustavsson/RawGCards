@@ -3,6 +3,8 @@ package com.tomgu.rawgcards.main.gameinfofrag
 import android.graphics.Typeface
 import android.os.Bundle
 import android.transition.*
+import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,11 +23,11 @@ import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FragmentGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.api.Game
+import kotlinx.android.synthetic.main.fragment_card_stack.*
 import javax.inject.Inject
 
 
 class GameInfoFragment : Fragment() {
-
 
     @Inject
     lateinit var vmFactory : AppViewModelFactory
@@ -79,8 +81,12 @@ class GameInfoFragment : Fragment() {
         })
 
         viewModel.getApiInfo(gameSlug)
-
-
+        viewModel.isApiError.observe(this, Observer {
+            if(it == true){
+                binding.descriptionScrollView.setText("Couldn't load game info")
+                binding.descriptionScrollView.gravity = Gravity.CENTER
+            }
+        })
 
         shareButton.setOnClickListener {
             if(state != "NoFriend"){
@@ -97,6 +103,7 @@ class GameInfoFragment : Fragment() {
         viewModel.getLiveDataApi().observe(this, Observer {
             binding.gameInf = it
             gameInfUrl = it.background_image_additional
+            Log.d("TGIW",gameInfUrl)
         })
         return binding.root
     }

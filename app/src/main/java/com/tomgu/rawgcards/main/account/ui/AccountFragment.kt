@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.MyBaseDiffUtil
 
@@ -53,6 +54,16 @@ class AccountFragment : Fragment() {
         binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         viewModel.getCurrentAccount()
+
+        viewModel.isApiFailed.observe(this, Observer {
+            if(it == true){
+                val snackbar = Snackbar.make(binding.accountBackground, "Couldn't load information", Snackbar.LENGTH_INDEFINITE)
+                snackbar.setAction("CLOSE", {
+                    snackbar.dismiss()
+                })
+                snackbar.show()
+            }
+        })
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
