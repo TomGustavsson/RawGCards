@@ -74,9 +74,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:2.25.2"
     kapt "com.google.dagger:dagger-android-support:2.25.2"
 
-    //CardStack Library
-    implementation 'com.github.wenchaojiang:AndroidSwipeableCardStack:0.1.0'
-
     //Diagonal Layout Library
     implementation 'com.github.florent37:diagonallayout:1.0.9'
 

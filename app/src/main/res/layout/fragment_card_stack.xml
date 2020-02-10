@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="game"
             type="com.tomgu.rawgcards.main.api.Game" />
     </data>
 
-<FrameLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
     android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent">
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card_stack"
+        app:layout_constraintTop_toBottomOf="@+id/my_card_stack"
         app:srcCompat="@drawable/ic_replay_black_24dp" />
 
     <Switch
@@ -40,28 +40,23 @@
         android:scaleX="2"
         android:scaleY="2"
         android:paddingTop="7dp"
-        app:layout_constraintBottom_toTopOf="@+id/card_stack"
+        app:layout_constraintBottom_toTopOf="@+id/my_card_stack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.wenchao.cardstack.CardStack
-        android:id="@+id/card_stack"
+    <com.tomgu.rawgcards.cardstack.MyCardStack
+        android:id="@+id/my_card_stack"
         android:layout_width="match_parent"
         android:layout_height="550dp"
-        android:layout_marginBottom="88dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:paddingLeft="20dp"
-        android:paddingTop="20dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="20dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" >
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchCategories">
 
-    </com.wenchao.cardstack.CardStack>
+    </com.tomgu.rawgcards.cardstack.MyCardStack>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -52,44 +52,66 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         if(share == "SHARE"){
             game = (arguments?.getSerializable(GAME_ARGUMENT) as Game?)!!
-            Log.d("tgiwbla", game.toString())
+
         }
 
         bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecyclerView)
         initRecyclerView()
 
-        if(state == "FRIENDS"){
-            viewModel.getFriends()
-            viewModel.getFriendsLiveData().observe(this, Observer {
-                Observable.just(it)
-                    .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        friendsAdapter.listItems = it.first
-                        it.second.dispatchUpdatesTo(friendsAdapter)
+        when(state){
+            "FRIENDS"-> {
+                viewModel.getFriends()
+                viewModel.getFriendsLiveData().observe(this, Observer {
+                    Observable.just(it)
+                        .map {
+                            Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            friendsAdapter.listItems = it.first
+                            it.second.dispatchUpdatesTo(friendsAdapter)
 
-                    },{
-                        Log.d("tgiw", it.toString())
-                    })
-            })
-        } else {
-            viewModel.getAllUsers()
-            viewModel.getUsersLiveData().observe(this, Observer {
-                Observable.just(it)
-                    .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        friendsAdapter.listItems = it.first
-                        it.second.dispatchUpdatesTo(friendsAdapter)
+                        }, {
+                            Log.d("tgiw", it.toString())
+                        })
+                })
+            }
+            "USERS" -> {
+                viewModel.getAllUsers()
+                viewModel.getUsersLiveData().observe(this, Observer {
+                    Observable.just(it)
+                        .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            friendsAdapter.listItems = it.first
+                            it.second.dispatchUpdatesTo(friendsAdapter)
 
-                    },{
-                        Log.d("tgiw", it.toString())
-                    })
-            })
+                        },{
+                            Log.d("tgiw", it.toString())
+                        })
+                })
+            }
+            "REQUESTS" -> {
+                viewModel.getAllFriendRequests()
+                viewModel.getFriendRequestLiveData().observe(this, Observer {
+                    Observable.just(it)
+                        .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                        }
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            friendsAdapter.listItems = it.first
+                            it.second.dispatchUpdatesTo(friendsAdapter)
+                        }, {
+                            Log.d("tgiw", it.toString())
+                        })
+                })
+
+            }
+
         }
 
         return view

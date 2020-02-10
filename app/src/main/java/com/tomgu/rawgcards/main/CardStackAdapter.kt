@@ -24,7 +24,7 @@ class CardStackAdapter(context: Context, resource: Int) : ArrayAdapter<Game>(con
         }
         binding.game = game
         binding.ratingBarCard.rating = game.rating.toFloat()
-        binding.progressBarCard.visibility = View.GONE
+        //binding.progressBarCard.visibility = View.GONE
         return binding.root
     }
 

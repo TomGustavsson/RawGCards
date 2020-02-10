@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.LinearLayout
 import android.widget.Switch
+import androidx.constraintlayout.widget.Constraints
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -16,6 +18,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
+import com.tomgu.rawgcards.cardstack.CardStackListener
+import com.tomgu.rawgcards.cardstack.CardView
+import com.tomgu.rawgcards.cardstack.MyCardStack
 import com.tomgu.rawgcards.databinding.FragmentCardStackBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.CardStackAdapter
@@ -25,10 +30,7 @@ import com.wenchao.cardstack.CardStack
 import javax.inject.Inject
 
 
-class CardStackFragment : Fragment(), CardStack.CardEventListener {
-
-    private var card_stack: CardStack? = null
-    private var card_adapter: CardStackAdapter? = null
+class CardStackFragment : Fragment(), CardStackListener {
 
     @Inject
     lateinit var vmFactory : AppViewModelFactory
@@ -37,8 +39,10 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
     lateinit var viewModel: MainViewModel
 
     lateinit var categorieName: String
-    var cardIndex : Int = 0
     var game: Game? = null
+
+    lateinit var myCardStack: MyCardStack
+    val cardSize = Constraints.LayoutParams(900,1400)
 
     private lateinit var categorieFragment: Fragment
 
@@ -56,7 +60,6 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
 
         if(arguments!!.getSerializable("Game") != null)
         game = arguments!!.getSerializable("Game") as Game
-
 
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         postponeEnterTransition()
@@ -85,72 +88,29 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
         reverseFab.setOnClickListener {
             reverseFab.animate().rotation(reverseFab.getRotation()-360).start()
             viewModel.resetAllPages()
-            card_adapter!!.clear()
             viewModel.getApiItems()
-            card_stack!!.reset(true)
-            cardIndex = 0
+            myCardStack.resetCardStack()
         }
-
-        card_adapter = CardStackAdapter(context!!, 0)
-
-        card_stack = binding.cardStack
-        card_stack!!.setContentResource(R.layout.card_layout)
-        card_stack!!.setStackMargin(20)
-        card_stack!!.setAdapter(card_adapter!!)
-
-        card_stack!!.setListener(this)
 
         viewModel.getApiItems()
 
+        myCardStack = binding.myCardStack
+
+        myCardStack.cardStackListener = this
+
         viewModel.getLiveData().observe(this, Observer {
 
-            it.games.forEach {
-                card_adapter!!.add(it)
-            }
+            myCardStack.setList(it.games)
 
-            (card_stack as? ViewGroup)?.doOnPreDraw {
+            (myCardStack as? ViewGroup)?.doOnPreDraw {
                 // Parent has been drawn. Start transitioning!
                 startPostponedEnterTransition()}
 
         })
-
         binding.game = game
 
 
         return binding.root
-    }
-
-    override fun swipeEnd(i: Int, v: Float): Boolean {
-
-        if (i == 1 || i == 3){
-            viewModel.setSaveGameList(card_adapter!!.getItem(card_stack!!.currIndex)!!)
-            cardIndex ++
-        } else {
-            cardIndex ++
-        }
-        if(cardIndex >= 18){
-            viewModel.incrementCurrentPage()
-            viewModel.getApiItems()
-            cardIndex = 0
-        }
-
-        return v > 300
-    }
-
-    override fun swipeStart(i: Int, v: Float): Boolean {
-        return false
-    }
-
-    override fun swipeContinue(i: Int, v: Float, v1: Float): Boolean {
-        return false
-    }
-
-    override fun discarded(i: Int, i1: Int) {
-
-    }
-
-    override fun topCardTapped() {
-
     }
 
     companion object{
@@ -176,6 +136,21 @@ class CardStackFragment : Fragment(), CardStack.CardEventListener {
             return cardStackFragment
         }
     }
+
+    override fun onRejected(game: Game) {
+    }
+
+    override fun onApproved(game: Game) {
+        viewModel.setSaveGameList(game)
+    }
+
+    override fun viewCountRemain(count: Int) {
+        if(count <= 2){
+            viewModel.incrementCurrentPage()
+            viewModel.getApiItems()
+        }
+    }
+
 
 }
 
