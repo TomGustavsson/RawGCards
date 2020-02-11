@@ -26,17 +26,18 @@ class AccountShape(context: Context, attributeSet: AttributeSet): View(context, 
 
         val canvasHeight = canvas!!.height.toFloat()
         val canvasWidth = canvas!!.width.toFloat()
+        val radius = 150.0f
 
+        val corEffect = CornerPathEffect(radius)
+        paint.setPathEffect(corEffect)
 
-        myPath.reset()
-        myPath.moveTo(0f, canvasHeight)
-        myPath.lineTo(canvasWidth - (canvasWidth / 4), canvasHeight/2)
-        myPath.lineTo(0f, 0f)
-        myPath.lineTo(0f, 0f + (canvasHeight / 3))              //Move
-        myPath.lineTo(0f + (canvasWidth / 4), canvasHeight/2)   //Move
-        myPath.lineTo(0f, canvasHeight - (canvasHeight / 3))     //Move
+        myPath.moveTo(-50f, canvasHeight + 50f)
         myPath.lineTo(0f, canvasHeight)
-
+        myPath.lineTo(0f + (canvasWidth / 4), canvasHeight - (canvasHeight / 6))
+        myPath.lineTo(0f + (canvasWidth / 2), canvasHeight)
+        myPath.lineTo(canvasWidth - (canvasWidth / 4), canvasHeight)
+        myPath.lineTo(canvasWidth + 50f, canvasHeight - (canvasHeight / 4))
+        myPath.lineTo(canvasWidth + 50f, canvasHeight + 20f)
 
         canvas?.drawPath(myPath, paint)
     }

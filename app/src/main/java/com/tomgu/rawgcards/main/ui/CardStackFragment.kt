@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 import android.widget.Switch
-import androidx.constraintlayout.widget.Constraints
 import androidx.core.view.doOnPreDraw
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,11 +17,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.cardstack.CardStackListener
-import com.tomgu.rawgcards.cardstack.CardView
 import com.tomgu.rawgcards.cardstack.MyCardStack
 import com.tomgu.rawgcards.databinding.FragmentCardStackBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.CardStackAdapter
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.categoriedialog.CategorieFragment
 import javax.inject.Inject

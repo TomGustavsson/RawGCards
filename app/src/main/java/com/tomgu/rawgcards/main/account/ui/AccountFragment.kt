@@ -49,9 +49,8 @@ class AccountFragment : Fragment() {
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
 
-        binding.emailTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.usersTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        //binding.usersTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        //binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         viewModel.getCurrentAccount()
 
@@ -67,42 +66,42 @@ class AccountFragment : Fragment() {
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
-            binding.requestCount.setText(it.friendRequests!!.size.toString())
+            //binding.requestCount.setText(it.friendRequests!!.size.toString())
         })
         viewModel.getFriends()
         viewModel.getFriendsLiveData().observe(this, Observer {
-            binding.friendsCount.setText(it.size.toString())
+            //binding.friendsCount.setText(it.size.toString())
         })
         viewModel.getAllUsers()
         viewModel.getUsersLiveData().observe(this, Observer {
-            binding.usersCount.setText(it.size.toString())
+            //binding.usersCount.setText(it.size.toString())
         })
 
 
-        binding.usersTextView.setOnClickListener {
+        binding.usersFab.setOnClickListener {
             bottomSheetDialog = BottomSheetDialog.newInstance(null,"USERS", "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
-        binding.friendsTextView.setOnClickListener {
+        binding.friendsFab.setOnClickListener {
             bottomSheetDialog = BottomSheetDialog.newInstance(null,"FRIENDS", "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
-        binding.signOutButton.setOnClickListener {
+        binding.signOutFab.setOnClickListener {
             viewModel.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
         }
 
-        binding.requestText.setOnClickListener {
+        binding.requestsFab.setOnClickListener {
             bottomSheetDialog = BottomSheetDialog.newInstance(null, "REQUESTS", "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, " bottomsheetDialog")
         }
 
-        ObjectAnimator.ofInt(binding.progressBarGames, "progress", 50)
+        /*ObjectAnimator.ofInt(binding.progressBarGames, "progress", 50)
             .setDuration(3000)
-            .start()
+            .start()*/
 
         return binding.root
     }

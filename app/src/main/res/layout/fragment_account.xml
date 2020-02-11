@@ -10,15 +10,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/accountBackground"
-        android:background="@drawable/broken_universe">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,237 +27,165 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="54dp"
-                    android:layout_height="42dp"
-                    android:src="@mipmap/rawg_icon"
+                    android:id="@+id/gameInfoImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/background_pic"
+                    android:scaleType="centerCrop"
+                    android:transitionName="game_transition"
+                    app:layout_collapseMode="parallax" />
+
+                <com.tomgu.rawgcards.customviews.DiagonalTriangle
+                    android:id="@+id/diagonalTriangle"
+                    android:layout_width="match_parent"
+                    android:layout_height="135dp"
+                    android:layout_gravity="bottom"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.244"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageView"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/guest_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.051"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.421" />
+                    app:loadImage="@{account.photo}" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="68dp"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="RawGCards"
-                    android:textColor="@color/colorBackground"
+                    android:text="Tom Gustavsson"
+                    android:textColor="@color/colorAccent"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.087"
-                    app:layout_constraintStart_toEndOf="@+id/imageView"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.595" />
+                    app:layout_constraintTop_toTopOf="@+id/diagonalTriangle"
+                    app:layout_constraintVertical_bias="0.857" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </FrameLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="300dp"
-            android:layout_height="500dp"
-            android:alpha="0.8"
-            android:background="#000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline11"
-            app:layout_constraintVertical_bias="0.35">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dp"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/friendsLinear"
+                android:background="@drawable/underline_layout"
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_marginTop="108dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/friendsFab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingRight="10dp">
+                    android:src="@drawable/ic_action_friends"
+                    app:useCompatPadding="true" />
 
-                    <TextView
-                        android:id="@+id/friendsCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/custom_wallpoet"
-                        android:text="0"
-                        android:textColor="#8EA8C3" />
-
-                    <TextView
-                        android:id="@+id/friendsTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/wallpoet"
-                        android:padding="10dp"
-                        android:text="Friends"
-                        android:textColor="#8EA8C3"
-                        tools:layout_editor_absoluteX="32dp"
-                        tools:layout_editor_absoluteY="606dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingRight="5dp">
+                    android:text="Your friends"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:textColor="@color/colorAccent"
+                    android:layout_gravity="center"/>
 
-                    <TextView
-                        android:id="@+id/usersCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/custom_wallpoet"
-                        android:text="0"
-                        android:textColor="#8EA8C3" />
+            </LinearLayout>
+        <LinearLayout
+            android:background="@drawable/underline_layout"
+            android:id="@+id/usersLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/usersTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/wallpoet"
-                        android:padding="10dp"
-                        android:text="Users"
-                        android:textColor="#8EA8C3" />
-                </LinearLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/usersFab"
+                android:src="@drawable/ic_action_users"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:useCompatPadding="true" />
 
-                <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All users"
+                android:textSize="18sp"
+                android:fontFamily="@font/custom_wallpoet"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@drawable/underline_layout"
+            android:id="@+id/requestsLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/requestsFab"
+                android:src="@drawable/ic_contact_mail_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:useCompatPadding="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your friend requests"
+                android:textSize="18sp"
+                android:fontFamily="@font/custom_wallpoet"
+                android:textColor="@color/colorAccent"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:background="@drawable/underline_layout"
+                android:id="@+id/signOutLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:src="@drawable/ic_action_signout"
+                    android:id="@+id/signOutFab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    app:useCompatPadding="true" />
 
-                    <TextView
-                        android:id="@+id/requestCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/custom_wallpoet"
-                        android:text="0"
-                        android:textColor="#8EA8C3" />
-
-                    <TextView
-                        android:id="@+id/requestText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/wallpoet"
-                        android:padding="10dp"
-                        android:text="Requests"
-                        android:textColor="#8EA8C3" />
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign out"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/custom_wallpoet"
+                    android:textColor="@color/colorAccent"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/emailTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/wallpoet"
-                android:text="@{account.email}"
-                android:textAlignment="center"
-                android:textColor="#8EA8C3"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
-                android:fontFamily="@font/custom_wallpoet"
-                android:text="@{account.name}"
-                android:textAlignment="center"
-                android:textColor="#8EA8C3"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-            <TextView
-                android:id="@+id/savedGamesText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/custom_wallpoet"
-                android:text="Saved Games"
-                android:textColor="#8EA8C3"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
-
-            <ProgressBar
-                android:id="@+id/progressBarGames"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:max="100"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/savedGamesText" />
-
-            <Button
-                android:id="@+id/signOutButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/custom_wallpoet"
-                android:text="Sign Out"
-                android:textColor="#8EA8C3"
-                android:background="@color/colorBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/progressBarGames" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/circleImageView"
-            android:layout_width="96dp"
-            android:layout_height="94dp"
-            android:layout_gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline11"
-            app:loadImageCircle="@{account.photo}" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.21" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
 
 </layout>
