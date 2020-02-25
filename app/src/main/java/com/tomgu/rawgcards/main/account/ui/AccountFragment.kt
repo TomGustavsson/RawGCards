@@ -46,9 +46,11 @@ class AccountFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: FragmentAccountBinding = FragmentAccountBinding.inflate(LayoutInflater.from(context))
 
+        binding.lifecycleOwner = viewLifecycleOwner
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
 
+        binding.viewModel = viewModel
         //binding.usersTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         //binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
@@ -98,10 +100,6 @@ class AccountFragment : Fragment() {
             bottomSheetDialog = BottomSheetDialog.newInstance(null, "REQUESTS", "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, " bottomsheetDialog")
         }
-
-        /*ObjectAnimator.ofInt(binding.progressBarGames, "progress", 50)
-            .setDuration(3000)
-            .start()*/
 
         return binding.root
     }

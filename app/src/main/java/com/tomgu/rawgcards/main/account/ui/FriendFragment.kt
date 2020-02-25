@@ -40,8 +40,11 @@ class FriendFragment(val friend: Account): Fragment() {
 
     lateinit var adapter: MyBaseAdapter<Game, GameListItemBinding>
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var binding : FriendFragmentLayoutBinding = FriendFragmentLayoutBinding.inflate(LayoutInflater.from(context))
+
+        binding.lifecycleOwner = viewLifecycleOwner
 
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
@@ -49,69 +52,27 @@ class FriendFragment(val friend: Account): Fragment() {
         recyclerView = binding.root.findViewById(R.id.sharedGamesRecyclerView)
         initRecyclerView()
         binding.account = friend
+        binding.viewModel = viewModel
 
-        viewModel.getCurrentAccount()
-        viewModel.getCurrentAccountLiveData().observe(this, Observer {
-
-            if(it.friendRequests!!.contains(friend.uid)){
-                recyclerView.visibility = View.GONE
-                binding.acceptButton.visibility = View.VISIBLE
-                binding.declineButton.visibility = View.VISIBLE
-
-            } else if(it.friends!!.contains(friend.uid)){
-                recyclerView.visibility = View.VISIBLE
-
-            } else {
-                recyclerView.visibility = View.GONE
-                binding.addFriendImage.visibility = View.VISIBLE
-
-            }
-        })
-
-        viewModel.getIsUploadedLiveData().observe(this, Observer {
+        viewModel.friendState(friend.uid!!)
+        viewModel.isFriend().observe(this, Observer {
             if(it == true){
-                binding.progressBarFriend.visibility = View.GONE
-                viewModel.getCurrentAccount()
-            } else {
-                Toast.makeText(activity,"Something went wrong", Toast.LENGTH_LONG).show()
+                setFriendsSharedGames()
             }
         })
 
         binding.acceptButton.setOnClickListener{
-            binding.acceptButton.visibility = View.GONE
-            binding.declineButton.visibility = View.GONE
-            binding.progressBarFriend.visibility = View.VISIBLE
-            viewModel.acceptFriendRequest(friend.uid!!)
+            viewModel.acceptFriendRequest(friend.uid)
 
         }
 
         binding.declineButton.setOnClickListener{
-            viewModel.declineFriendRequest(friend.uid!!)
-            binding.acceptButton.visibility = View.GONE
-            binding.declineButton.visibility = View.GONE
-            binding.progressBarFriend.visibility = View.VISIBLE
+            viewModel.declineFriendRequest(friend.uid)
         }
 
         binding.addFriendImage.setOnClickListener{
-            viewModel.addFriend(friend.uid!!)
+            viewModel.addFriend(friend.uid)
         }
-
-        viewModel.getSharedGames(friend.uid!!)
-        viewModel.getGamesLiveData().observe(this, Observer {
-            Observable.just(it)
-                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(adapter.listItems, it)))
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    adapter.listItems = it.first
-                    it.second.dispatchUpdatesTo(adapter)
-
-                },{
-                    Log.d("tgiw", it.toString())
-                })
-        })
-
 
 
         return binding.root
@@ -141,5 +102,23 @@ class FriendFragment(val friend: Account): Fragment() {
         }
         recyclerView.adapter = adapter
 
+    }
+
+    fun setFriendsSharedGames(){
+        viewModel.getSharedGames(friend.uid!!)
+        viewModel.getGamesLiveData().observe(this, Observer {
+            Observable.just(it)
+                .map{Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(adapter.listItems, it)))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    adapter.listItems = it.first
+                    it.second.dispatchUpdatesTo(adapter)
+
+                },{
+                    Log.d("tgiw", it.toString())
+                })
+        })
     }
 }

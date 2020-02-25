@@ -45,6 +45,7 @@ class CategorieFragment : Fragment() {
         viewModel.getActionLiveData().observe(this, Observer {
             binding.categorieAction.game = it.games[0]
             actionGame = it.games[0]
+
         })
 
         viewModel.getFightingLiveData().observe(this, Observer {

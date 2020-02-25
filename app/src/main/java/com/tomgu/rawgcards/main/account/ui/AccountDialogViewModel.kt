@@ -35,7 +35,20 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    private var isUploadedLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private var isUploadingLiveData = MutableLiveData<Boolean>().apply { value = false}
+    fun isUploadingLiveData(): LiveData<Boolean> = isUploadingLiveData
+
+    private val isRequest = MutableLiveData<Boolean>().apply {value = false}
+    fun isRequest(): LiveData<Boolean> = isRequest
+
+    private var isFriend = MutableLiveData<Boolean>().apply { value = true }
+    fun isFriend(): LiveData<Boolean> {
+        Log.d("TGIW", isFriend.value.toString())
+        return isFriend
+    }
+
+    private var isUnknown = MutableLiveData<Boolean>().apply { value = false }
+    fun isUnknown(): LiveData<Boolean> = isUnknown
 
      override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
@@ -67,6 +80,25 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         }
     }
 
+    fun friendState(friendUid: String){
+        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
+            val account = it.toObject(Account::class.java)
+            if(account!!.friendRequests!!.contains(friendUid)){
+                isRequest.value = true
+                Log.d("TGIW", "Request")
+            }
+            else if(account.friends!!.contains(friendUid)){
+                isFriend.postValue(true)
+                Log.d("TGIW", isFriend().value.toString() + isUploadingLiveData().value.toString())
+            } else {
+                isUnknown.value = true
+                Log.d("TGIW", "Unkown")
+            }
+        }.addOnFailureListener {
+            Log.d("TGIW", it.toString())
+        }
+    }
+
     fun signOut(){
         accountRepository.signOut()
     }
@@ -76,20 +108,23 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun acceptFriendRequest(friendUid: String){
+        isUploadingLiveData.value = true
         accountRepository.acceptFriendRequest(friendUid) {
-            isUploadedLiveData.value = it
+            isUploadingLiveData.value = it
         }
     }
 
     fun declineFriendRequest(friendUid: String){
+        isUploadingLiveData.value = true
         accountRepository.declineFriendRequest(friendUid) {
-            isUploadedLiveData.value = it
+            isUploadingLiveData.value = it
         }
     }
 
     fun addFriend(friendUid: String){
+        isUploadingLiveData.value = true
         accountRepository.addFriend(friendUid) {
-            isUploadedLiveData.value = it
+            isUploadingLiveData.value = it
         }
     }
 
@@ -170,7 +205,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun getIsUploadedLiveData(): LiveData<Boolean>{
-        return isUploadedLiveData
+        return isUploadingLiveData
     }
 
 }

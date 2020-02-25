@@ -7,17 +7,21 @@
         <variable
             name="account"
             type="com.tomgu.rawgcards.main.account.Account" />
+        <variable
+            name="viewModel"
+            type="com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/accountBackground"
+        android:background="@color/colorBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -151,6 +155,12 @@
                 android:fontFamily="@font/custom_wallpoet"
                 android:textColor="@color/colorAccent"
                 android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_priority_high_black_24dp"
+                android:layout_gravity="center"
+                app:visibility="@{viewModel.friendRequestLiveData != null}"/>
 
         </LinearLayout>
 

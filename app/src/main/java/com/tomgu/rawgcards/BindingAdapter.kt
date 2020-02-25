@@ -1,5 +1,6 @@
 package com.tomgu.rawgcards
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
@@ -31,5 +32,13 @@ object BindingAdapter {
         bar.rating = string.toFloat()
     }
 
-
+    @JvmStatic
+    @BindingAdapter("visibility")
+    fun bindVisibility(view: View, visibility: Boolean) {
+        if (visibility == true){
+            view.visibility = View.VISIBLE
+        } else if (visibility == false){
+            view.visibility = View.GONE
+        }
+    }
 }
