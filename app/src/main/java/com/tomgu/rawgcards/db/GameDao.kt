@@ -1,8 +1,7 @@
 package com.tomgu.rawgcards.db
 
 import androidx.room.*
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.api.CompleteGame
 import io.reactivex.Flowable
 import io.reactivex.Single
 

@@ -10,8 +10,8 @@ import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.login.LoginFragment
-import com.tomgu.rawgcards.main.account.ui.AccountFragment
-import com.tomgu.rawgcards.main.gamefragment.GameListFragment
+import com.tomgu.rawgcards.account.ui.AccountFragment
+import com.tomgu.rawgcards.gamefragment.GameListFragment
 import javax.inject.Inject
 
 

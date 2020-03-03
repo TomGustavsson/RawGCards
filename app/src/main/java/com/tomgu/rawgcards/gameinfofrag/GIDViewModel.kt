@@ -1,17 +1,12 @@
-package com.tomgu.rawgcards.main.gameinfofrag
+package com.tomgu.rawgcards.gameinfofrag
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.login.AccountRepository
-import com.tomgu.rawgcards.main.GameRepository
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.api.GameInfo
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.tomgu.rawgcards.GameRepository
+import com.tomgu.rawgcards.api.CompleteGame
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class GIDViewModel: ViewModel(), AppComponent.Injectable {

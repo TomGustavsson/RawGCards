@@ -1,7 +1,6 @@
-package com.tomgu.rawgcards.main
+package com.tomgu.rawgcards
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding

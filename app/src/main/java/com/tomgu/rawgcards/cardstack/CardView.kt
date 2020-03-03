@@ -1,14 +1,13 @@
 package com.tomgu.rawgcards.cardstack
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.constraintlayout.widget.Constraints
 import androidx.databinding.DataBindingUtil
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.CardLayoutBinding
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.api.Game
 
 class CardView(context: Context, layoutParams: Constraints.LayoutParams): FrameLayout(context) {
 

@@ -1,10 +1,8 @@
 package com.tomgu.rawgcards.login
 
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -12,9 +10,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tomgu.rawgcards.main.account.Account
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.api.CompleteGame
 
 class AccountRepository {
 

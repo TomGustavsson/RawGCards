@@ -7,10 +7,10 @@
     <data>
         <variable
             name="account"
-            type="com.tomgu.rawgcards.main.account.Account" />
+            type="com.tomgu.rawgcards.account.Account" />
         <variable
             name="viewModel"
-            type="com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel" />
+            type="com.tomgu.rawgcards.account.ui.AccountDialogViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

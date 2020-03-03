@@ -7,7 +7,7 @@
     <data>
         <variable
             name="game"
-            type="com.tomgu.rawgcards.main.api.Game" />
+            type="com.tomgu.rawgcards.api.Game" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout

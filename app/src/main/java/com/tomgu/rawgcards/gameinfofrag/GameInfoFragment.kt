@@ -1,10 +1,8 @@
-package com.tomgu.rawgcards.main.gameinfofrag
+package com.tomgu.rawgcards.gameinfofrag
 
 import android.graphics.Typeface
 import android.os.Bundle
 import android.transition.*
-import android.util.Log
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -22,9 +19,7 @@ import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FragmentGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
-import kotlinx.android.synthetic.main.fragment_card_stack.*
+import com.tomgu.rawgcards.api.CompleteGame
 import javax.inject.Inject
 
 
@@ -41,8 +36,8 @@ class GameInfoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        var binding: FragmentGameInfoBinding = FragmentGameInfoBinding.inflate(LayoutInflater.from(context))
-        var shareButton = binding.root.findViewById<FloatingActionButton>(R.id.shareButton)
+        val binding: FragmentGameInfoBinding = FragmentGameInfoBinding.inflate(LayoutInflater.from(context))
+        val shareButton = binding.root.findViewById<FloatingActionButton>(R.id.shareButton)
 
         binding.gameInfoImage.transitionName = arguments?.getString(TRANS_NAME)
         gameSlug = arguments?.getString(SLUG_ARGUMENT)!!
@@ -72,7 +67,7 @@ class GameInfoFragment : Fragment() {
 
         binding.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { appBarLayout, offset ->
 
-            var slideOffset = offset * -1f
+            val slideOffset = offset * -1f
             binding.diagonalTriangle.offset = slideOffset / appBarLayout.totalScrollRange
 
             if(slideOffset > appBarLayout.totalScrollRange - 200) {

@@ -1,6 +1,6 @@
 package com.tomgu.rawgcards.cardstack
 
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.api.Game
 
 interface CardStackListener {
 

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.tomgu.rawgcards.main.categoriedialog.CategorieViewModel" />
+            type="com.tomgu.rawgcards.categoriedialog.CategorieViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".main.categoriedialog.CategorieFragment">
+            tools:context=".categoriedialog.CategorieFragment">
 
 
             <LinearLayout
@@ -63,7 +63,7 @@
                     android:fontFamily="@font/custom_wallpoet"
                     android:text="@string/label_action" />
 
-                <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
+                <com.tomgu.rawgcards.categoriedialog.CategorieShape
                     android:id="@+id/categorieAction"
                     android:layout_width="160dp"
                     android:layout_height="210dp"
@@ -82,7 +82,7 @@
                     android:fontFamily="@font/custom_wallpoet"
                     android:text="@string/label_fighting" />
 
-                <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
+                <com.tomgu.rawgcards.categoriedialog.CategorieShape
                     android:id="@+id/categorieFighting"
                     android:layout_width="160dp"
                     android:layout_height="210dp"
@@ -101,7 +101,7 @@
                     android:fontFamily="@font/custom_wallpoet"
                     android:text="@string/label_racing" />
 
-                <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
+                <com.tomgu.rawgcards.categoriedialog.CategorieShape
                     android:id="@+id/categorieRacing"
                     android:layout_width="160dp"
                     android:layout_height="210dp"
@@ -120,7 +120,7 @@
                     android:fontFamily="@font/custom_wallpoet"
                     android:text="@string/label_shooting" />
 
-                <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
+                <com.tomgu.rawgcards.categoriedialog.CategorieShape
                     android:id="@+id/categorieShooting"
                     android:layout_width="160dp"
                     android:layout_height="210dp"
@@ -139,7 +139,7 @@
                     android:fontFamily="@font/custom_wallpoet"
                     android:text="@string/label_rpg" />
 
-                <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
+                <com.tomgu.rawgcards.categoriedialog.CategorieShape
                     android:id="@+id/categorieRPG"
                     android:layout_width="160dp"
                     android:layout_height="210dp"

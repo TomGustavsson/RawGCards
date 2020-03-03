@@ -5,17 +5,12 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import android.util.Log
 import androidx.room.Room
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.gson.Gson
 import com.tomgu.rawgcards.AppViewModelFactory
-import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.db.AppDB
 import com.tomgu.rawgcards.db.GameDao
 import com.tomgu.rawgcards.login.AccountRepository
-import com.tomgu.rawgcards.main.GameRepository
-import com.tomgu.rawgcards.main.api.GameAPI
+import com.tomgu.rawgcards.GameRepository
+import com.tomgu.rawgcards.api.GameAPI
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -115,7 +110,7 @@ class AppModule(private val applicationContext: Context){
     }
     @Singleton
     @Provides
-    fun gameRepository(gameAPI: GameAPI, gameDao: GameDao) : GameRepository{
+    fun gameRepository(gameAPI: GameAPI, gameDao: GameDao) : GameRepository {
         return GameRepository(gameAPI, gameDao)
     }
 

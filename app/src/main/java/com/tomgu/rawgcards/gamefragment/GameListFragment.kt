@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.gamefragment
+package com.tomgu.rawgcards.gamefragment
 
 
 import android.os.Bundle
@@ -6,9 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -20,15 +18,11 @@ import com.tomgu.rawgcards.MyBaseDiffUtil
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.GameListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.MyBaseAdapter
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
+import com.tomgu.rawgcards.MyBaseAdapter
+import com.tomgu.rawgcards.api.CompleteGame
+import com.tomgu.rawgcards.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_game_list.*
 import kotlinx.android.synthetic.main.fragment_game_list.view.*
 import javax.inject.Inject
 

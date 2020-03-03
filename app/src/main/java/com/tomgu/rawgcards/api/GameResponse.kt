@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.api
+package com.tomgu.rawgcards.api
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo

@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.gameinfofrag
+package com.tomgu.rawgcards.gameinfofrag
 
 import android.os.Bundle
 import android.util.Log
@@ -18,12 +18,11 @@ import com.tomgu.rawgcards.R
 import io.reactivex.Observable
 import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.MyBaseAdapter
-import com.tomgu.rawgcards.main.account.Account
-import com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel
-import com.tomgu.rawgcards.main.account.ui.FriendFragment
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.MyBaseAdapter
+import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.account.ui.AccountDialogViewModel
+import com.tomgu.rawgcards.account.ui.FriendFragment
+import com.tomgu.rawgcards.api.CompleteGame
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

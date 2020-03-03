@@ -20,8 +20,8 @@ import com.tomgu.rawgcards.cardstack.CardStackListener
 import com.tomgu.rawgcards.cardstack.MyCardStack
 import com.tomgu.rawgcards.databinding.FragmentCardStackBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.categoriedialog.CategorieFragment
+import com.tomgu.rawgcards.api.Game
+import com.tomgu.rawgcards.categoriedialog.CategorieFragment
 import javax.inject.Inject
 
 

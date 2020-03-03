@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseUser
-import com.tomgu.rawgcards.main.account.Account
+import com.tomgu.rawgcards.account.Account
 import com.tomgu.rawgcards.di.AppComponent
 import javax.inject.Inject
 

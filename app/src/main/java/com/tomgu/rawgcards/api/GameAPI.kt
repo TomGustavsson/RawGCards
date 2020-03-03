@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.api
+package com.tomgu.rawgcards.api
 
 import io.reactivex.Observable
 import retrofit2.http.GET

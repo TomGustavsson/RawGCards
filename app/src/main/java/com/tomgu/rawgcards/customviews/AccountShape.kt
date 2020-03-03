@@ -25,7 +25,7 @@ class AccountShape(context: Context, attributeSet: AttributeSet): View(context, 
         super.onDraw(canvas)
 
         val canvasHeight = canvas!!.height.toFloat()
-        val canvasWidth = canvas!!.width.toFloat()
+        val canvasWidth = canvas.width.toFloat()
         val radius = 150.0f
 
         val corEffect = CornerPathEffect(radius)
@@ -39,7 +39,7 @@ class AccountShape(context: Context, attributeSet: AttributeSet): View(context, 
         myPath.lineTo(canvasWidth + 50f, canvasHeight - (canvasHeight / 4))
         myPath.lineTo(canvasWidth + 50f, canvasHeight + 20f)
 
-        canvas?.drawPath(myPath, paint)
+        canvas.drawPath(myPath, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.categoriedialog
+package com.tomgu.rawgcards.categoriedialog
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.databinding.DataBindingUtil
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.CardLayoutBinding
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.api.Game
 
 
 class CategorieShape(context: Context, attributeSet: AttributeSet): FrameLayout(context, attributeSet) {

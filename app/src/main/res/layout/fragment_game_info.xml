@@ -6,7 +6,7 @@
 
         <variable
             name="completeGame"
-            type="com.tomgu.rawgcards.main.api.CompleteGame" />
+            type="com.tomgu.rawgcards.api.CompleteGame" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

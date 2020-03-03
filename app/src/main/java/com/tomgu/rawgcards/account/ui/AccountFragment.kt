@@ -1,37 +1,20 @@
-package com.tomgu.rawgcards.main.account.ui
+package com.tomgu.rawgcards.account.ui
 
-import android.animation.ObjectAnimator
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.tomgu.rawgcards.AppViewModelFactory
-import com.tomgu.rawgcards.MyBaseDiffUtil
 
-import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FragmentAccountBinding
-import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.login.LoginActivity
-import com.tomgu.rawgcards.main.MyBaseAdapter
-import com.tomgu.rawgcards.main.account.Account
-import com.tomgu.rawgcards.main.gameinfofrag.BottomSheetDialog
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.tomgu.rawgcards.gameinfofrag.BottomSheetDialog
 import javax.inject.Inject
 
 class AccountFragment : Fragment() {

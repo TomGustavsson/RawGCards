@@ -8,9 +8,8 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.Constraints
 import com.tomgu.rawgcards.R
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.api.Game
 import kotlinx.android.synthetic.main.card_layout.view.*
-import kotlin.math.log
 
 class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(context, attributeSet){
 
@@ -63,7 +62,7 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
             val imageApproved = view.findViewById<ImageView>(R.id.approved_image)
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    dX = view!!.x - event.rawX
+                    dX = view.x - event.rawX
                     dY = view.y - event.rawY
 
                     view.animate().cancel()
@@ -148,7 +147,7 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
                 }
                 MotionEvent.ACTION_MOVE -> {
 
-                    val childEndPositionX = view!!.x + (view.width / 2)
+                    val childEndPositionX = view.x + (view.width / 2)
 
                     val totalDragRange = this.width / 4
                     val offsetFromMiddle = childEndPositionX - (this.width / 2)

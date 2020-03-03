@@ -1,13 +1,11 @@
-package com.tomgu.rawgcards.main.gamefragment
+package com.tomgu.rawgcards.gamefragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
-import com.tomgu.rawgcards.main.GameRepository
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
+import com.tomgu.rawgcards.GameRepository
+import com.tomgu.rawgcards.api.CompleteGame
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject

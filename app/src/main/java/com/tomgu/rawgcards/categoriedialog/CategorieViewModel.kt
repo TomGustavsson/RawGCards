@@ -1,12 +1,11 @@
-package com.tomgu.rawgcards.main.categoriedialog
+package com.tomgu.rawgcards.categoriedialog
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
-import com.tomgu.rawgcards.main.GameRepository
-import com.tomgu.rawgcards.main.api.GameResponse
+import com.tomgu.rawgcards.GameRepository
+import com.tomgu.rawgcards.api.GameResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

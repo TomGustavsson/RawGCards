@@ -1,4 +1,4 @@
-package com.tomgu.rawgcards.main.account.ui
+package com.tomgu.rawgcards.account.ui
 
 
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,11 +18,10 @@ import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FriendFragmentLayoutBinding
 import com.tomgu.rawgcards.databinding.GameListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.main.MyBaseAdapter
-import com.tomgu.rawgcards.main.account.Account
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
+import com.tomgu.rawgcards.MyBaseAdapter
+import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.api.CompleteGame
+import com.tomgu.rawgcards.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

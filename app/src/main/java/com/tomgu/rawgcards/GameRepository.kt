@@ -1,11 +1,9 @@
-package com.tomgu.rawgcards.main
+package com.tomgu.rawgcards
 
 import com.tomgu.rawgcards.db.GameDao
-import com.tomgu.rawgcards.main.api.CompleteGame
-import com.tomgu.rawgcards.main.api.Game
-import com.tomgu.rawgcards.main.api.GameAPI
+import com.tomgu.rawgcards.api.CompleteGame
+import com.tomgu.rawgcards.api.GameAPI
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
 class GameRepository(val gameAPI: GameAPI,
