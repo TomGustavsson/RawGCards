@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.main.GameRepository
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,7 +17,7 @@ class GameListViewModel: ViewModel(), AppComponent.Injectable {
     @Inject
     lateinit var gameRepository: GameRepository
 
-    private val gameLiveData : MutableLiveData<MutableList<Game>> = MutableLiveData()
+    private val gameLiveData : MutableLiveData<MutableList<CompleteGame>> = MutableLiveData()
     private var roomDisposable: Disposable? = null
 
     override fun inject(appComponent: AppComponent) {
@@ -35,11 +36,11 @@ class GameListViewModel: ViewModel(), AppComponent.Injectable {
             }
     }
 
-    fun deleteGame(game: Game){
+    fun deleteGame(game: CompleteGame){
         gameRepository.delete(game)
     }
 
-    fun getLiveDataRoom() : MutableLiveData<MutableList<Game>>{
+    fun getLiveDataRoom() : MutableLiveData<MutableList<CompleteGame>>{
         return gameLiveData
     }
 }

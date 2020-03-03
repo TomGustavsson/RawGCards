@@ -5,12 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="com.tomgu.rawgcards.main.categoriedialog.CategorieViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/custom_wallpoet"
+            android:text="@string/label_error"
+            android:textColor="@color/colorAccent"
+            app:visibility="@{viewModel.getIsApiCallFailed()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:visibility="@{viewModel.getIsLoading()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <GridLayout
             android:layout_width="wrap_content"
@@ -20,6 +43,7 @@
             android:columnCount="2"
             android:padding="2dp"
             android:rowCount="3"
+            app:visibility="@{!viewModel.getIsApiCallFailed() &amp;&amp; !viewModel.getIsLoading()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Action" />
+                    android:text="@string/label_action" />
 
                 <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
                     android:id="@+id/categorieAction"
@@ -56,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Fighting" />
+                    android:text="@string/label_fighting" />
 
                 <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
                     android:id="@+id/categorieFighting"
@@ -75,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Racing" />
+                    android:text="@string/label_racing" />
 
                 <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
                     android:id="@+id/categorieRacing"
@@ -94,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Shooting" />
+                    android:text="@string/label_shooting" />
 
                 <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
                     android:id="@+id/categorieShooting"
@@ -113,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="RPG" />
+                    android:text="@string/label_rpg" />
 
                 <com.tomgu.rawgcards.main.categoriedialog.CategorieShape
                     android:id="@+id/categorieRPG"
@@ -132,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorAccent"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Platform" />
+                    android:text="@string/label_platform" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:background="@drawable/gradient_list_item"
@@ -145,7 +169,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/custom_wallpoet"
-                        android:text="Coming soon..."
+                        android:text="@string/label_coming_soon"
                         android:textColor="@color/colorAccent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

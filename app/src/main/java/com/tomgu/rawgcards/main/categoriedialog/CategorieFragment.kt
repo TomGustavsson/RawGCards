@@ -36,6 +36,9 @@ class CategorieFragment : Fragment() {
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[CategorieViewModel::class.java]
 
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+
         exitTransition = Explode()
 
 
@@ -65,10 +68,9 @@ class CategorieFragment : Fragment() {
         })
 
         binding.categorieAction.setOnClickListener{
-            val image = it.findViewById<ImageView>(R.id.image_content)
-            image.transitionName = "image_trans"
-            createFragment("Action",image)
-
+                val image = it.findViewById<ImageView>(R.id.image_content)
+                image.transitionName = "image_trans"
+                createFragment("Action", image)
         }
         binding.categorieFighting.setOnClickListener {
             val image = it.findViewById<ImageView>(R.id.image_content)

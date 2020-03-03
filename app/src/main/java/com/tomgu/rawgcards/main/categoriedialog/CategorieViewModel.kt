@@ -23,6 +23,8 @@ class CategorieViewModel: ViewModel(), AppComponent.Injectable {
     private val responseLiveDataRacing: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
     private val responseLiveDataShooting: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
     private val responseLiveDataRPG: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
+    private val isApiCallFailed: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isLoading: MutableLiveData<Boolean> = MutableLiveData(true)
 
     fun getAllApiItems(gameMap: HashMap<String, Int>) {
         gameMap.forEach { categorie ->
@@ -31,6 +33,8 @@ class CategorieViewModel: ViewModel(), AppComponent.Injectable {
                 .unsubscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
+                    isApiCallFailed.value = false
+                    isLoading.value = false
                     when(categorie.key){
                         "1" -> responseLiveDataRacing.value = it
                         "2" -> responseLiveDataShooting.value = it
@@ -40,11 +44,18 @@ class CategorieViewModel: ViewModel(), AppComponent.Injectable {
                     }
                 },{
                     Log.d("tgiwe", it.toString())
+                    isApiCallFailed.value = true
+                    isLoading.value = false
                 }))
         }
 
     }
-
+    fun getIsLoading(): MutableLiveData<Boolean>{
+        return isLoading
+    }
+    fun getIsApiCallFailed(): MutableLiveData<Boolean>{
+        return isApiCallFailed
+    }
     fun getActionLiveData(): MutableLiveData<GameResponse>{
         return responseLiveDataAction
     }

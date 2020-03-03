@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="label_action">Action</string>
+    <string name="label_rpg">RPG</string>
+    <string name="label_shooting">Shooting</string>
+    <string name="label_racing">Racing</string>
+    <string name="label_platform">Platform</string>
+    <string name="label_fighting">Fighting</string>
+    <string name="label_error">Sorry! Something went wrong..</string>
+    <string name="label_coming_soon">Coming soon...</string>
 </resources>

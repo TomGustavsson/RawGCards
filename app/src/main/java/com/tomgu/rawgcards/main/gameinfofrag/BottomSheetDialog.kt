@@ -22,6 +22,7 @@ import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.main.account.ui.AccountDialogViewModel
 import com.tomgu.rawgcards.main.account.ui.FriendFragment
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -37,7 +38,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
     lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
     lateinit var bottomSheetRecyclerView: RecyclerView
 
-    var game: Game? = null
+    var game: CompleteGame? = null
     lateinit var state: String
     lateinit var share: String
 
@@ -51,7 +52,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         share = arguments?.getString(SHARE_ARGUMENT)!!
 
         if(share == "SHARE"){
-            game = (arguments?.getSerializable(GAME_ARGUMENT) as Game?)!!
+            game = (arguments?.getSerializable(GAME_ARGUMENT) as CompleteGame?)!!
 
         }
 
@@ -150,7 +151,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         private const val STATE_ARGUMENT = "state"
         private const val SHARE_ARGUMENT = "share"
 
-        fun newInstance(game : Game?, state : String, share : String) : BottomSheetDialog {
+        fun newInstance(game : CompleteGame?, state : String, share : String) : BottomSheetDialog {
             val bottomSheetDialog = BottomSheetDialog()
 
             val arguments = Bundle()

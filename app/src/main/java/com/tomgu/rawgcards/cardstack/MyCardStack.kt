@@ -57,10 +57,10 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
         val newX: Float
         val newY: Float
         val view = getChildAt(childCount - 1)
-        val imageRejected = view.findViewById<ImageView>(R.id.rejected_image)
-        val imageApproved = view.findViewById<ImageView>(R.id.approved_image)
 
-
+        if (view != null) {
+            val imageRejected = view.findViewById<ImageView>(R.id.rejected_image)
+            val imageApproved = view.findViewById<ImageView>(R.id.approved_image)
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
                     dX = view!!.x - event.rawX
@@ -70,7 +70,7 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
                 }
                 MotionEvent.ACTION_UP -> {
 
-                    val childEndPositionX = view!!.x + (view.width / 2)
+                    val childEndPositionX = view.x + (view.width / 2)
                     val childEndPostionY = view.y + (view.height / 2)
                     var corner: Float = 0f
 
@@ -179,7 +179,9 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
             }
 
             return true
+        } else {
+            return false
+
         }
-
-
+    }
  }

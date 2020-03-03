@@ -5,7 +5,7 @@
     <data>
         <variable
             name="game"
-            type="com.tomgu.rawgcards.main.api.Game" />
+            type="com.tomgu.rawgcards.main.api.CompleteGame" />
     </data>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

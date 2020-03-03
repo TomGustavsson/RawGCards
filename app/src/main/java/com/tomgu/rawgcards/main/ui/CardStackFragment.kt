@@ -47,7 +47,8 @@ class CardStackFragment : Fragment(), CardStackListener {
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val reverseFab : FloatingActionButton = binding.reverseFab
-
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.getHashMapFromPreferences()
         categorieName = arguments!!.getString("Categorie")!!
         viewModel.setCategorieToApi(categorieName)
@@ -76,6 +77,11 @@ class CardStackFragment : Fragment(), CardStackListener {
             }
         }
 
+        binding.refreshImage.setOnClickListener {
+            it.animate().rotation(it.getRotation()-360).start()
+            viewModel.getApiItems()
+        }
+
         switchCategories.setOnCheckedChangeListener(com)
 
         //Reverse Button
@@ -89,11 +95,7 @@ class CardStackFragment : Fragment(), CardStackListener {
         viewModel.getApiItems()
         viewModel.isApiFailed.observe(this, Observer {
             if(it == true){
-                val snackbar = Snackbar.make(binding.cardStackBackground, "Couldn't load games", Snackbar.LENGTH_INDEFINITE)
-                snackbar.setAction("Refresh", {
-                    snackbar.dismiss()
-                    viewModel.getApiItems()
-                })
+                val snackbar = Snackbar.make(binding.cardStackBackground, "Couldn't load games", Snackbar.LENGTH_SHORT)
                 snackbar.show()
         }
         })

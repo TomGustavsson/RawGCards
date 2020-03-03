@@ -22,6 +22,7 @@ import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.R
 import com.tomgu.rawgcards.databinding.FragmentGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import kotlinx.android.synthetic.main.fragment_card_stack.*
 import javax.inject.Inject
@@ -35,8 +36,7 @@ class GameInfoFragment : Fragment() {
 
     lateinit var gameSlug: String
 
-    lateinit var gameShare: Game
-    lateinit var gameInfUrl: String
+    lateinit var gameShare: CompleteGame
     lateinit var state: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,7 +46,7 @@ class GameInfoFragment : Fragment() {
 
         binding.gameInfoImage.transitionName = arguments?.getString(TRANS_NAME)
         gameSlug = arguments?.getString(SLUG_ARGUMENT)!!
-        gameShare = (arguments?.getSerializable(GAME_ARGUMENT) as Game?)!!
+        gameShare = (arguments?.getSerializable(GAME_ARGUMENT) as CompleteGame?)!!
         state = arguments?.getString(STATE_ARGUMENT)!!
 
         if(state == "Friend"){
@@ -76,15 +76,7 @@ class GameInfoFragment : Fragment() {
             binding.diagonalTriangle.offset = slideOffset / appBarLayout.totalScrollRange
 
             if(slideOffset > appBarLayout.totalScrollRange - 200) {
-                Picasso.get().load(gameInfUrl).into(binding.gameInfoImage)
-            }
-        })
-
-        viewModel.getApiInfo(gameSlug)
-        viewModel.isApiError.observe(this, Observer {
-            if(it == true){
-                binding.descriptionScrollView.setText("Couldn't load game info")
-                binding.descriptionScrollView.gravity = Gravity.CENTER
+                Picasso.get().load(gameShare.backgound_image_additional).into(binding.gameInfoImage)
             }
         })
 
@@ -98,13 +90,8 @@ class GameInfoFragment : Fragment() {
             }
         }
 
-        binding.game = gameShare
+        binding.completeGame = gameShare
 
-        viewModel.getLiveDataApi().observe(this, Observer {
-            binding.gameInf = it
-            gameInfUrl = it.background_image_additional
-            Log.d("TGIW",gameInfUrl)
-        })
         return binding.root
     }
 
@@ -114,7 +101,7 @@ class GameInfoFragment : Fragment() {
         private const val GAME_ARGUMENT = "game"
         private const val STATE_ARGUMENT = "state"
 
-        fun newInstance(slug : String, transName: String, game: Game, state: String): GameInfoFragment{
+        fun newInstance(slug : String, transName: String, game: CompleteGame, state: String): GameInfoFragment{
 
             val gameInfoFragment = GameInfoFragment()
             val arguments = Bundle()

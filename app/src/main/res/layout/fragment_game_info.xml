@@ -3,12 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
-            name="game"
-            type="com.tomgu.rawgcards.main.api.Game" />
-        <variable
-            name="gameInf"
-            type="com.tomgu.rawgcards.main.api.GameInfo" />
+            name="completeGame"
+            type="com.tomgu.rawgcards.main.api.CompleteGame" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -40,7 +38,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        app:loadImage="@{game.background_image}"
+                        app:loadImage="@{completeGame.background_image}"
                         android:transitionName="game_transition"/>
 
                         <com.tomgu.rawgcards.customviews.DiagonalTriangle
@@ -56,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:title="@{game.name}"
+                    app:title="@{completeGame.name}"
                     app:layout_collapseMode="pin">
 
                 </androidx.appcompat.widget.Toolbar>
@@ -84,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/wallpoet"
                     android:padding="5dp"
-                    android:text="@{gameInf.description}"
+                    android:text="@{completeGame.description}"
                     android:textColor="#8EA8C3" />
             </LinearLayout>
 

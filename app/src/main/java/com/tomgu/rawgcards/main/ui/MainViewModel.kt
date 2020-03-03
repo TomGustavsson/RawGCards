@@ -1,5 +1,6 @@
 package com.tomgu.rawgcards.main.ui
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.databinding.ObservableField
@@ -10,6 +11,7 @@ import com.tomgu.rawgcards.main.account.Account
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.login.AccountRepository
 import com.tomgu.rawgcards.main.GameRepository
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.api.GameResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -71,8 +73,16 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
     }
 
 
+    @SuppressLint("CheckResult")
     fun setSaveGameList(game : Game){
-            gameRepository.insert(game)
+        gameRepository.getApi().getGameObject(game.slug)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                gameRepository.insert(CompleteGame(game.slug,game.name,game.rating,game.background_image,it.description,it.background_image_additional))
+            }, {
+                Log.d("TGIW", it.toString())
+            })
     }
 
     fun setCategorieToApi(ce: String){

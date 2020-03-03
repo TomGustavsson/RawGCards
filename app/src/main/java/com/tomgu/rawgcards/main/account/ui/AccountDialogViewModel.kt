@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.login.AccountRepository
 import com.tomgu.rawgcards.main.account.Account
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -27,7 +28,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     private var friendRequestLiveData: MutableLiveData<List<Account>> = MutableLiveData()
 
-    private var sharedGamesLiveData : MutableLiveData<List<Game>> = MutableLiveData()
+    private var sharedGamesLiveData : MutableLiveData<List<CompleteGame>> = MutableLiveData()
 
     private var allUsersLiveData : MutableLiveData<List<Account>> = MutableLiveData()
 
@@ -103,7 +104,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         accountRepository.signOut()
     }
 
-    fun shareGame(game : Game, uid: String){
+    fun shareGame(game : CompleteGame, uid: String){
         accountRepository.uploadGameToFriend(game, uid)
     }
 
@@ -131,9 +132,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun getSharedGames(friendUid: String){
         accountRepository.retrieveSharedGames().document(friendUid).collection("SharedGames").get()
             .addOnSuccessListener {
-                var allGames = mutableListOf<Game>()
+                var allGames = mutableListOf<CompleteGame>()
                 it.forEach {
-                    val game = it.toObject(Game::class.java)
+                    val game = it.toObject(CompleteGame::class.java)
                     allGames.add(game)
                     sharedGamesLiveData.value = allGames
                 }
@@ -184,7 +185,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
 
-    fun getGamesLiveData(): LiveData<List<Game>>{
+    fun getGamesLiveData(): LiveData<List<CompleteGame>>{
         return sharedGamesLiveData
     }
 

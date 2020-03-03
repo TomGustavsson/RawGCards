@@ -21,6 +21,7 @@ import com.tomgu.rawgcards.databinding.GameListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.main.MyBaseAdapter
 import com.tomgu.rawgcards.main.account.Account
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 import com.tomgu.rawgcards.main.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
@@ -38,7 +39,7 @@ class FriendFragment(val friend: Account): Fragment() {
     lateinit var recyclerView : RecyclerView
     lateinit var gameInfoFragment: GameInfoFragment
 
-    lateinit var adapter: MyBaseAdapter<Game, GameListItemBinding>
+    lateinit var adapter: MyBaseAdapter<CompleteGame, GameListItemBinding>
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -80,11 +81,11 @@ class FriendFragment(val friend: Account): Fragment() {
 
     fun initRecyclerView(){
         recyclerView.layoutManager = LinearLayoutManager(activity)
-            adapter = object : MyBaseAdapter<Game, GameListItemBinding>(){
+            adapter = object : MyBaseAdapter<CompleteGame, GameListItemBinding>(){
             override fun getLayoutResId(): Int {
                 return R.layout.game_list_item
             }
-            override fun onBindData(model: Game, dataBinding: GameListItemBinding) {
+            override fun onBindData(model: CompleteGame, dataBinding: GameListItemBinding) {
                 dataBinding.game = model
                 dataBinding.gameListImage.transitionName = "image_transition_" + model.slug
                 dataBinding.gameListRoot.setOnClickListener {

@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.tomgu.rawgcards.main.account.Account
+import com.tomgu.rawgcards.main.api.CompleteGame
 import com.tomgu.rawgcards.main.api.Game
 
 class AccountRepository {
@@ -130,7 +131,7 @@ class AccountRepository {
         return db
     }
 
-    fun uploadGameToFriend(game: Game, friendUid: String) {
+    fun uploadGameToFriend(game: CompleteGame, friendUid: String) {
         db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
             .collection("SharedGames").get().addOnSuccessListener {
                 var gameDocuments = mutableListOf<String>()
