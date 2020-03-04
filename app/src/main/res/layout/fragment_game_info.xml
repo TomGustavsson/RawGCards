@@ -7,6 +7,9 @@
         <variable
             name="completeGame"
             type="com.tomgu.rawgcards.api.CompleteGame" />
+        <variable
+            name="viewModel"
+            type="com.tomgu.rawgcards.gameinfofrag.GIDViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -95,6 +98,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:pressedTranslationZ="12dp"
+            android:layout_marginEnd="8dp"
+            app:visibility="@{viewModel.getCurrentAccountLiveData()}"
             app:layout_anchor="@id/app_bar_layout"
             app:layout_anchorGravity="bottom|right|end"/>
 

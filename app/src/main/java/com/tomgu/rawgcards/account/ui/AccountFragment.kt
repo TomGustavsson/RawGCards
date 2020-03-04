@@ -34,34 +34,22 @@ class AccountFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
 
         binding.viewModel = viewModel
-        //binding.usersTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        //binding.textView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         viewModel.getCurrentAccount()
 
         viewModel.isApiFailed.observe(this, Observer {
             if(it == true){
                 val snackbar = Snackbar.make(binding.accountBackground, "Couldn't load information", Snackbar.LENGTH_INDEFINITE)
-                snackbar.setAction("CLOSE", {
+                snackbar.setAction("CLOSE") {
                     snackbar.dismiss()
-                })
+                }
                 snackbar.show()
             }
         })
 
         viewModel.getCurrentAccountLiveData().observe(this, Observer {
             binding.account = it
-            //binding.requestCount.setText(it.friendRequests!!.size.toString())
         })
-        viewModel.getFriends()
-        viewModel.getFriendsLiveData().observe(this, Observer {
-            //binding.friendsCount.setText(it.size.toString())
-        })
-        viewModel.getAllUsers()
-        viewModel.getUsersLiveData().observe(this, Observer {
-            //binding.usersCount.setText(it.size.toString())
-        })
-
 
         binding.usersFab.setOnClickListener {
             bottomSheetDialog = BottomSheetDialog.newInstance(null,"USERS", "NOSHARE")

@@ -3,6 +3,7 @@ package com.tomgu.rawgcards.gameinfofrag
 import android.graphics.Typeface
 import android.os.Bundle
 import android.transition.*
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,6 +55,9 @@ class GameInfoFragment : Fragment() {
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
 
+        viewModel.getCurrentUser()
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
         val toolbar = binding.toolbar
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)

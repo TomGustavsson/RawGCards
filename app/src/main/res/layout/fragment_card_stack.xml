@@ -65,6 +65,7 @@
             android:clickable="true"
             android:elevation="3dp"
             android:focusable="true"
+            android:layout_marginEnd="8dp"
             android:paddingBottom="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline10"

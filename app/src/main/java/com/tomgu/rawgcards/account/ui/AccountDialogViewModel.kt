@@ -35,7 +35,6 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
 
     private var isFriend = MutableLiveData<Boolean>().apply { value = true }
     fun isFriend(): LiveData<Boolean> {
-        Log.d("TGIW", isFriend.value.toString())
         return isFriend
     }
 
@@ -77,17 +76,14 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
             val account = it.toObject(Account::class.java)
             if(account!!.friendRequests!!.contains(friendUid)){
                 isRequest.value = true
-                Log.d("TGIW", "Request")
             }
             else if(account.friends!!.contains(friendUid)){
                 isFriend.postValue(true)
-                Log.d("TGIW", isFriend().value.toString() + isUploadingLiveData().value.toString())
             } else {
                 isUnknown.value = true
-                Log.d("TGIW", "Unkown")
             }
         }.addOnFailureListener {
-            Log.d("TGIW", it.toString())
+            isApiFailed.value = true
         }
     }
 
