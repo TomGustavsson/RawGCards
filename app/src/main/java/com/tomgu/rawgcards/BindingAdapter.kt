@@ -41,4 +41,22 @@ object BindingAdapter {
             view.visibility = View.GONE
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("hasRequests")
+    fun alphaValueRequest(view: View, hasRequests: Boolean){
+        if(hasRequests){
+            view.alpha = 1.0f
+        } else {
+            view.alpha = 0.5f
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("clickAllowed")
+    fun clickAllowed(view: View, hasRequests: Boolean){
+        if(!hasRequests){
+            view.isClickable = false
+        }
+    }
 }

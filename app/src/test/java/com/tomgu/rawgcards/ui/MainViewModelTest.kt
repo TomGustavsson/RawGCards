@@ -2,6 +2,9 @@ package com.tomgu.rawgcards.ui
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.tomgu.rawgcards.GameRepository
+import com.tomgu.rawgcards.api.GameAPI
+import com.tomgu.rawgcards.api.GameResponse
 import com.tomgu.rawgcards.main.ui.MainViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -15,6 +18,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
+import java.util.*
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -22,6 +26,13 @@ class MainViewModelTest {
 
     @Mock
     private lateinit var pagePreferences: SharedPreferences
+
+    @Mock
+    private lateinit var gameRepository: GameRepository
+
+    @Mock
+    private lateinit var gameApi : GameAPI
+
     lateinit var mockEditor : SharedPreferences.Editor
 
     lateinit var mainViewModel: MainViewModel
@@ -37,9 +48,6 @@ class MainViewModelTest {
         val context: Context = mock<Context>(Context::class.java)
 
         `when`(pagePreferences.edit()).thenReturn(mockEditor)
-        `when`(context.getSharedPreferences(anyString(), anyInt())).thenReturn(pagePreferences)
-
-
     }
 
     @Test
@@ -72,4 +80,9 @@ class MainViewModelTest {
         assertEquals(mainViewModel.getActionKey(), pagePreferences.getInt(anyString(), anyInt()))
 
     }
+    /*@Test
+    fun `test Api call`(){
+        `when`(gameRepository.getApi()).thenReturn(gameApi)
+        `when`(gameRepository.getApi().getStoreObject(anyInt(), anyString(), anyString())).thenReturn(Observable<GameResponse>)
+    }*/
 }

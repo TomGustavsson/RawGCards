@@ -32,7 +32,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
 
     val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData<GameResponse>()
+    private val responseLiveData: MutableLiveData<GameResponse> = MutableLiveData()
 
     var categorie : String = "1"
         get() = field
@@ -69,18 +69,19 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
         return responseLiveData
     }
 
-
     @SuppressLint("CheckResult")
     fun setSaveGameList(game : Game){
         gameRepository.getApi().getGameObject(game.slug)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                gameRepository.insert(CompleteGame(game.slug,game.name,game.rating,game.background_image,it.description,it.background_image_additional))
+                gameRepository.insert(CompleteGame(game.slug,game.name,game.rating,game.background_image,android.text.Html.fromHtml(it.description).toString(),it.background_image_additional))
             }, {
                 Log.d("TGIW", it.toString())
             })
     }
+
+
 
     fun setCategorieToApi(ce: String){
         when(ce){

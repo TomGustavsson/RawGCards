@@ -48,16 +48,24 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="38dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/diagonalTriangle" />
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageView"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_marginBottom="16dp"
+                    android:layout_marginStart="16dp"
                     android:src="@drawable/guest_image"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.051"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/diagonalTriangle"
                     app:loadImage="@{account.photo}" />
 
                 <TextView
@@ -137,6 +145,7 @@
         <LinearLayout
             android:background="@drawable/underline_layout"
             android:id="@+id/requestsLinear"
+            app:hasRequests="@{viewModel.friendRequestLiveData != null}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -145,6 +154,7 @@
                 android:src="@drawable/ic_contact_mail_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:clickAllowed="@{viewModel.friendRequestLiveData != null}"
                 app:useCompatPadding="true" />
 
             <TextView
