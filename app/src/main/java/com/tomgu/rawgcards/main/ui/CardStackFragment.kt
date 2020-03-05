@@ -47,8 +47,10 @@ class CardStackFragment : Fragment(), CardStackListener {
         viewModel = ViewModelProviders.of(this, vmFactory)[MainViewModel::class.java]
 
         val reverseFab : FloatingActionButton = binding.reverseFab
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
         viewModel.getHashMapFromPreferences()
         categorieName = arguments!!.getString("Categorie")!!
         viewModel.setCategorieToApi(categorieName)
@@ -60,11 +62,10 @@ class CardStackFragment : Fragment(), CardStackListener {
         postponeEnterTransition()
 
         switchCategories = binding.switchCategories
-
         //Open categorie fragment
         val com = object : CompoundButton.OnCheckedChangeListener{
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-                if(p1){
+                if(p1 && switchCategories.isPressed){
                     categorieFragment = CategorieFragment.newInstance(viewModel.getHashMap())
                     activity!!.supportFragmentManager
                         .beginTransaction()
@@ -118,6 +119,11 @@ class CardStackFragment : Fragment(), CardStackListener {
 
 
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        switchCategories.isChecked = false
     }
 
     companion object{

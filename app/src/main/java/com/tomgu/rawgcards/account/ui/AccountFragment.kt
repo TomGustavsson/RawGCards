@@ -27,6 +27,7 @@ class AccountFragment : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val binding: FragmentAccountBinding = FragmentAccountBinding.inflate(LayoutInflater.from(context))
 
         binding.lifecycleOwner = viewLifecycleOwner
