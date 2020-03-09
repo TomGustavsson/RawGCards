@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -52,16 +53,14 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         if(share == "SHARE"){
             game = (arguments?.getSerializable(GAME_ARGUMENT) as CompleteGame?)!!
-
         }
-
         bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecyclerView)
         initRecyclerView()
 
         when(state){
             "FRIENDS"-> {
                 viewModel.getFriends()
-                viewModel.getFriendsLiveData().observe(this, Observer {
+                viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
                     Observable.just(it)
                         .map {
                             Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
@@ -79,7 +78,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
             }
             "USERS" -> {
                 viewModel.getAllUsers()
-                viewModel.getUsersLiveData().observe(this, Observer {
+                viewModel.getUsersLiveData().observe(viewLifecycleOwner, Observer {
                     Observable.just(it)
                         .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
                         }
@@ -96,7 +95,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
             }
             "REQUESTS" -> {
                 viewModel.getAllFriendRequests()
-                viewModel.getFriendRequestLiveData().observe(this, Observer {
+                viewModel.getFriendRequestLiveData().observe(viewLifecycleOwner, Observer {
                     Observable.just(it)
                         .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
                         }
@@ -138,7 +137,6 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
                         fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
                         fragmentTransaction.commit()
                     }
-
                 }
             }
         }

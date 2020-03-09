@@ -70,7 +70,6 @@
             android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -81,13 +80,32 @@
 
                 <TextView
                     android:id="@+id/descriptionScrollView"
+                    android:layout_margin="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/wallpoet"
-                    android:padding="5dp"
                     android:text="@{completeGame.description}"
                     android:textColor="#8EA8C3" />
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <ImageView
+                        android:scaleType="centerCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/account_background"/>
+
+                    <com.tomgu.rawgcards.customviews.ReversedTriangle
+                        android:id="@+id/reversedTriangle"
+                        android:layout_width="match_parent"
+                        android:layout_height="135dp"
+                        android:layout_gravity="top"/>
+
+                </FrameLayout>
+
             </LinearLayout>
+
 
         </androidx.core.widget.NestedScrollView>
 

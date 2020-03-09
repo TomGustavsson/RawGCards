@@ -75,6 +75,9 @@ class GameInfoFragment : Fragment() {
             val slideOffset = offset * -1f
             binding.diagonalTriangle.offset = slideOffset / appBarLayout.totalScrollRange
 
+            binding.reversedTriangle.offset = slideOffset / appBarLayout.totalScrollRange
+            Log.d("TGIW", (slideOffset / appBarLayout.totalScrollRange).toString())
+
             if(slideOffset > appBarLayout.totalScrollRange - 200) {
                 Picasso.get().load(gameShare.backgound_image_additional).into(binding.gameInfoImage)
             }

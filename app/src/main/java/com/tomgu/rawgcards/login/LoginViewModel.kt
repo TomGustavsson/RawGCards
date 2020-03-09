@@ -15,12 +15,12 @@ class LoginViewModel: ViewModel(), AppComponent.Injectable {
 
     @Inject
     lateinit var accountRepository: AccountRepository
+
     private val authenticatedUserMutableLiveData: MutableLiveData<Account> = MutableLiveData()
 
     override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
     }
-
 
     fun signInWithGoogle(googleAuthCredential: GoogleSignInAccount) {
         accountRepository.firebaseSignInWithGoogle(googleAuthCredential) {

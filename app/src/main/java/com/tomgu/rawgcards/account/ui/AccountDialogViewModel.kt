@@ -15,16 +15,22 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     lateinit var accountRepository: AccountRepository
 
     private var friendsLiveData : MutableLiveData<List<Account>> = MutableLiveData()
+    fun getFriendsLiveData(): LiveData<List<Account>> = friendsLiveData
 
     private var friendRequestLiveData: MutableLiveData<List<Account>> = MutableLiveData()
+    fun getFriendRequestLiveData(): LiveData<List<Account>> = friendRequestLiveData
 
     private var sharedGamesLiveData : MutableLiveData<List<CompleteGame>> = MutableLiveData()
+    fun getGamesLiveData(): LiveData<List<CompleteGame>> = sharedGamesLiveData
 
     private var allUsersLiveData : MutableLiveData<List<Account>> = MutableLiveData()
+    fun getUsersLiveData(): LiveData<List<Account>> = allUsersLiveData
 
     private var currentAccountLiveData: MutableLiveData<Account> = MutableLiveData()
+    fun getCurrentAccountLiveData(): LiveData<Account> = currentAccountLiveData
 
-    val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
+    fun isApiFailed(): LiveData<Boolean> = isApiFailed
 
     private var isUploadingLiveData = MutableLiveData<Boolean>().apply { value = false}
     fun isUploadingLiveData(): LiveData<Boolean> = isUploadingLiveData
@@ -36,6 +42,8 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun isFriend(): LiveData<Boolean> {
         return isFriend
     }
+
+    var toastMessage: MutableLiveData<String> = MutableLiveData()
 
     private var isUnknown = MutableLiveData<Boolean>().apply { value = false }
     fun isUnknown(): LiveData<Boolean> = isUnknown
@@ -91,7 +99,9 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     }
 
     fun shareGame(game : CompleteGame, uid: String){
-        accountRepository.uploadGameToFriend(game, uid)
+        accountRepository.uploadGameToFriend(game, uid){
+            toastMessage.value = it
+        }
     }
 
     fun acceptFriendRequest(friendUid: String){
@@ -118,7 +128,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun getSharedGames(friendUid: String){
         accountRepository.retrieveSharedGames().document(friendUid).collection("SharedGames").get()
             .addOnSuccessListener {
-                var allGames = mutableListOf<CompleteGame>()
+                val allGames = mutableListOf<CompleteGame>()
                 it.forEach {
                     val game = it.toObject(CompleteGame::class.java)
                     allGames.add(game)
@@ -132,7 +142,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun getAllUsers(){
 
         accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
-           var currentUser = it.toObject(Account::class.java)!!
+           val currentUser = it.toObject(Account::class.java)!!
 
             accountRepository.database().get()
                 .addOnSuccessListener { documentSnapshot ->
@@ -168,31 +178,6 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
             .addOnFailureListener {
                 isApiFailed.value = true
             }
-    }
-
-
-    fun getGamesLiveData(): LiveData<List<CompleteGame>>{
-        return sharedGamesLiveData
-    }
-
-    fun getFriendsLiveData(): LiveData<List<Account>>{
-        return friendsLiveData
-    }
-
-    fun getUsersLiveData(): LiveData<List<Account>>{
-        return allUsersLiveData
-    }
-
-    fun getCurrentAccountLiveData() : LiveData<Account> {
-        return currentAccountLiveData
-    }
-
-    fun getFriendRequestLiveData(): LiveData<List<Account>>{
-        return friendRequestLiveData
-    }
-
-    fun getIsUploadedLiveData(): LiveData<Boolean>{
-        return isUploadingLiveData
     }
 
 }

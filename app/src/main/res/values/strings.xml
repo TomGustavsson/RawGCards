@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RawGCards</string>
 
+    <!-- Categories Fragment strings -->
     <string name="label_action">Action</string>
     <string name="label_rpg">RPG</string>
     <string name="label_shooting">Shooting</string>
@@ -9,4 +10,10 @@
     <string name="label_fighting">Fighting</string>
     <string name="label_error">Sorry! Something went wrong..</string>
     <string name="label_coming_soon">Coming soon...</string>
+
+    <!-- Account Fragment strings -->
+    <string name="label_friends">Your friends</string>
+    <string name="label_all">All users</string>
+    <string name="label_requests">Your friend requests</string>
+    <string name="label_sign_out">Sign out</string>
 </resources>

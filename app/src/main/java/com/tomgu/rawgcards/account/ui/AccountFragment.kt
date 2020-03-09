@@ -38,9 +38,10 @@ class AccountFragment : Fragment() {
 
         viewModel.getCurrentAccount()
 
-        viewModel.isApiFailed.observe(viewLifecycleOwner, Observer {
+
+        viewModel.isApiFailed().observe(viewLifecycleOwner, Observer {
             if(it == true){
-                val snackbar = Snackbar.make(binding.accountBackground, "Couldn't load information", Snackbar.LENGTH_INDEFINITE)
+                val snackbar = Snackbar.make(binding.accountBackground, "Couldn't load information", Snackbar.LENGTH_LONG)
                 snackbar.setAction("CLOSE") {
                     snackbar.dismiss()
                 }

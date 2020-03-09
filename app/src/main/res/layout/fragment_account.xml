@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="68dp"
                     android:fontFamily="@font/custom_wallpoet"
-                    android:text="Tom Gustavsson"
+                    android:text="@{account.name}"
                     android:textColor="@color/colorAccent"
                     android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Your friends"
+                    android:text="@string/label_friends"
                     android:textSize="18sp"
                     android:fontFamily="@font/custom_wallpoet"
                     android:textColor="@color/colorAccent"
@@ -134,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All users"
+                android:text="@string/label_all"
                 android:textSize="18sp"
                 android:fontFamily="@font/custom_wallpoet"
                 android:textColor="@color/colorAccent"
@@ -160,7 +160,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Your friend requests"
+                android:text="@string/label_requests"
                 android:textSize="18sp"
                 android:fontFamily="@font/custom_wallpoet"
                 android:textColor="@color/colorAccent"
@@ -190,7 +190,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sign out"
+                    android:text="@string/label_sign_out"
                     android:textSize="18sp"
                     android:fontFamily="@font/custom_wallpoet"
                     android:textColor="@color/colorAccent"

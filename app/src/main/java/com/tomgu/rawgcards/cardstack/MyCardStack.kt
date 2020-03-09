@@ -19,6 +19,7 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
 
      var cardStackListener: CardStackListener? = null
 
+    //TODO: Remove the hardcoded layoutparams!
      var cardViewList = listOf(CardView(context, Constraints.LayoutParams(900,1400)), CardView(context, Constraints.LayoutParams(900,1400)), CardView(context, Constraints.LayoutParams(900,1400)))
 
     private var gameList: MutableList<Game> = mutableListOf()
@@ -71,7 +72,7 @@ class MyCardStack(context: Context, attributeSet: AttributeSet): RelativeLayout(
 
                     val childEndPositionX = view.x + (view.width / 2)
                     val childEndPostionY = view.y + (view.height / 2)
-                    var corner: Float = 0f
+                    var corner = 0f
 
                     if (childEndPositionX > this.width - (this.width / 4)) {
 

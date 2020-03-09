@@ -128,19 +128,24 @@ class AccountRepository {
         return db
     }
 
-    fun uploadGameToFriend(game: CompleteGame, friendUid: String) {
+    fun uploadGameToFriend(game: CompleteGame, friendUid: String, callback: (String) -> Unit) {
         db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
             .collection("SharedGames").get().addOnSuccessListener {
-                var gameDocuments = mutableListOf<String>()
+                val gameDocuments = mutableListOf<String>()
                 it.forEach {
                     gameDocuments.add(it.id)
                 }
                 if(gameDocuments.contains(game.slug)){
-                    Log.d("tgiwError","User already shared this game")
+                    callback.invoke("User already shared this game")
                 } else {
-
                     db.document(friendUid).collection("Friends").document(auth.currentUser!!.uid)
                         .collection("SharedGames").document(game.slug).set(game)
+                        .addOnSuccessListener {
+                            callback.invoke("Your game was uploaded")
+                        }
+                        .addOnFailureListener{
+                            callback.invoke("Something went wrong..")
+                        }
                 }
 
             }
