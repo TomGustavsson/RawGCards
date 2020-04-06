@@ -2,8 +2,10 @@ package com.tomgu.rawgcards.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.preference.PreferenceManager
 import android.util.Log
+import android.widget.MediaController
 import androidx.room.Room
 import com.tomgu.rawgcards.AppViewModelFactory
 import com.tomgu.rawgcards.db.AppDB
@@ -119,5 +121,7 @@ class AppModule(private val applicationContext: Context){
     fun accountRepository(): AccountRepository{
         return AccountRepository()
     }
+
+
 
 }

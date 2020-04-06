@@ -10,9 +10,14 @@
             type="com.tomgu.rawgcards.categoriedialog.CategorieViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground">
 
         <TextView
             android:layout_width="wrap_content"
@@ -182,5 +187,6 @@
         </GridLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </layout>

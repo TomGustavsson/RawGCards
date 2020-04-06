@@ -1,6 +1,7 @@
 package com.tomgu.rawgcards.gameinfofrag
 
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.transition.*
 import android.util.Log
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -41,6 +43,9 @@ class GameInfoFragment : Fragment() {
         val binding: FragmentGameInfoBinding = FragmentGameInfoBinding.inflate(LayoutInflater.from(context))
         val shareButton = binding.root.findViewById<FloatingActionButton>(R.id.shareButton)
 
+        (activity?.applicationContext as AppApplication).appComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
+
         binding.gameInfoImage.transitionName = arguments?.getString(TRANS_NAME)
         gameSlug = arguments?.getString(SLUG_ARGUMENT)!!
         gameShare = (arguments?.getSerializable(GAME_ARGUMENT) as CompleteGame?)!!
@@ -52,8 +57,12 @@ class GameInfoFragment : Fragment() {
 
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
 
-        (activity?.applicationContext as AppApplication).appComponent().inject(this)
-        viewModel = ViewModelProviders.of(this, vmFactory)[GIDViewModel::class.java]
+        if(gameShare.gameClip != null){
+            val mediaController = MediaController(activity)
+            binding.gameVideoView.setVideoURI(Uri.parse(gameShare.gameClip))
+            binding.gameVideoView.setMediaController(mediaController)
+            mediaController.setAnchorView(binding.gameVideoView)
+        }
 
         viewModel.getCurrentUser()
         binding.lifecycleOwner = viewLifecycleOwner

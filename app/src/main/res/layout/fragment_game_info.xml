@@ -86,15 +86,17 @@
                     android:fontFamily="@font/wallpoet"
                     android:text="@{completeGame.description}"
                     android:textColor="#8EA8C3" />
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp">
 
-                    <ImageView
-                        android:scaleType="centerCrop"
+                <FrameLayout
+                    android:id="@+id/videoFrameLayout"
+                    app:visibility="@{completeGame.gameClip != null}"
+                    android:layout_width="match_parent"
+                    android:layout_height="230dp">
+
+                    <VideoView
+                        android:id="@+id/gameVideoView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/account_background"/>
+                        android:layout_height="match_parent"/>
 
                     <com.tomgu.rawgcards.customviews.ReversedTriangle
                         android:id="@+id/reversedTriangle"

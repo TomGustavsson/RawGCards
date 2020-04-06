@@ -75,7 +75,7 @@ class MainViewModel : ViewModel(), AppComponent.Injectable{
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                gameRepository.insert(CompleteGame(game.slug,game.name,game.rating,game.background_image,android.text.Html.fromHtml(it.description).toString(),it.background_image_additional))
+                gameRepository.insert(CompleteGame(game.slug,game.name,game.rating,game.background_image,android.text.Html.fromHtml(it.description).toString(),it.background_image_additional, it.clip?.clip))
             }, {
                 Log.d("TGIW", it.toString())
             })
