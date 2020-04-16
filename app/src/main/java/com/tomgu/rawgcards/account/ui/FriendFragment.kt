@@ -19,7 +19,7 @@ import com.tomgu.rawgcards.databinding.FriendFragmentLayoutBinding
 import com.tomgu.rawgcards.databinding.GameListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.MyBaseAdapter
-import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.account.models.Account
 import com.tomgu.rawgcards.api.CompleteGame
 import com.tomgu.rawgcards.gameinfofrag.GameInfoFragment
 import io.reactivex.Observable
@@ -28,7 +28,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class FriendFragment(val friend: Account): Fragment() {
+class FriendFragment: Fragment() {
 
     @Inject
     lateinit var vmFactory: AppViewModelFactory
@@ -36,17 +36,20 @@ class FriendFragment(val friend: Account): Fragment() {
 
     lateinit var recyclerView : RecyclerView
     lateinit var gameInfoFragment: GameInfoFragment
+    lateinit var friend : Account
 
     lateinit var adapter: MyBaseAdapter<CompleteGame, GameListItemBinding>
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var binding : FriendFragmentLayoutBinding = FriendFragmentLayoutBinding.inflate(LayoutInflater.from(context))
+        val binding : FriendFragmentLayoutBinding = FriendFragmentLayoutBinding.inflate(LayoutInflater.from(context))
 
         binding.lifecycleOwner = viewLifecycleOwner
 
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
+
+        friend = arguments?.getSerializable(FRIEND_ARG) as Account
 
         recyclerView = binding.root.findViewById(R.id.sharedGamesRecyclerView)
         initRecyclerView()
@@ -54,23 +57,23 @@ class FriendFragment(val friend: Account): Fragment() {
         binding.viewModel = viewModel
 
         viewModel.friendState(friend.uid!!)
-        viewModel.isFriend().observe(this, Observer {
-            if(it == true){
+        viewModel.getFriendStateLiveData().observe(viewLifecycleOwner, Observer {
+            Log.d("TGIW", it.toString())
+            if(it == FriendState.FRIEND)
                 setFriendsSharedGames()
-            }
         })
 
         binding.acceptButton.setOnClickListener{
-            viewModel.acceptFriendRequest(friend.uid)
+            viewModel.acceptFriendRequest(friend.uid!!)
 
         }
 
         binding.declineButton.setOnClickListener{
-            viewModel.declineFriendRequest(friend.uid)
+            viewModel.declineFriendRequest(friend.uid!!)
         }
 
         binding.addFriendImage.setOnClickListener{
-            viewModel.addFriend(friend.uid)
+            viewModel.addFriend(friend.uid!!)
         }
 
 
@@ -119,5 +122,22 @@ class FriendFragment(val friend: Account): Fragment() {
                     Log.d("tgiw", it.toString())
                 })
         })
+    }
+
+    companion object {
+
+        private const val FRIEND_ARG = "friend"
+
+        fun newInstance(friend: Account): FriendFragment {
+
+            val friendFragment = FriendFragment()
+            val arguments = Bundle()
+
+            arguments.putSerializable(FRIEND_ARG, friend)
+
+            friendFragment.arguments = arguments
+
+            return friendFragment
+        }
     }
 }

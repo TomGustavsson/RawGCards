@@ -3,13 +3,10 @@ package com.tomgu.rawgcards.gameinfofrag
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseUser
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.login.AccountRepository
 import com.tomgu.rawgcards.GameRepository
-import com.tomgu.rawgcards.account.Account
 import com.tomgu.rawgcards.api.CompleteGame
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class GIDViewModel: ViewModel(), AppComponent.Injectable {

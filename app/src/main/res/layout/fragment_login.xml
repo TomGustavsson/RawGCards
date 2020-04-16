@@ -5,7 +5,7 @@
     <data>
         <variable
             name="account"
-            type="com.tomgu.rawgcards.account.Account" />
+            type="com.tomgu.rawgcards.account.models.Account" />
     </data>
 
     <FrameLayout

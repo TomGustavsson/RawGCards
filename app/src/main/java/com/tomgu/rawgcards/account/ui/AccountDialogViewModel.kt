@@ -1,11 +1,13 @@
 package com.tomgu.rawgcards.account.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.tomgu.rawgcards.di.AppComponent
 import com.tomgu.rawgcards.login.AccountRepository
-import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.account.models.Account
+import com.tomgu.rawgcards.account.models.State
 import com.tomgu.rawgcards.api.CompleteGame
 import javax.inject.Inject
 
@@ -32,21 +34,16 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     private val isApiFailed: MutableLiveData<Boolean> = MutableLiveData(false)
     fun isApiFailed(): LiveData<Boolean> = isApiFailed
 
-    private var isUploadingLiveData = MutableLiveData<Boolean>().apply { value = false}
+    private var isUploadingLiveData = MutableLiveData<Boolean>()
     fun isUploadingLiveData(): LiveData<Boolean> = isUploadingLiveData
 
-    private val isRequest = MutableLiveData<Boolean>().apply {value = false}
-    fun isRequest(): LiveData<Boolean> = isRequest
+    private var friendStateLiveData = MutableLiveData<FriendState>()
+    fun getFriendStateLiveData(): LiveData<FriendState> = friendStateLiveData
 
-    private var isFriend = MutableLiveData<Boolean>().apply { value = true }
-    fun isFriend(): LiveData<Boolean> {
-        return isFriend
-    }
+    private var requestStateLiveData = MutableLiveData<State>()
+    fun getRequestStateLiveData(): LiveData<State> = requestStateLiveData
 
     var toastMessage: MutableLiveData<String> = MutableLiveData()
-
-    private var isUnknown = MutableLiveData<Boolean>().apply { value = false }
-    fun isUnknown(): LiveData<Boolean> = isUnknown
 
      override fun inject(appComponent: AppComponent) {
         appComponent.inject(this)
@@ -81,13 +78,20 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun friendState(friendUid: String){
         accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
-            if(account!!.friendRequests!!.contains(friendUid)){
-                isRequest.value = true
+
+            account!!.friendRequests!!.forEach {
+                if(it.id == friendUid){
+                    friendStateLiveData.value = FriendState.REQUEST
+                    requestStateLiveData.value = it.state
+                    return@addOnSuccessListener
+                }
             }
-            else if(account.friends!!.contains(friendUid)){
-                isFriend.postValue(true)
+            if(account.friends!!.contains(friendUid)){
+                friendStateLiveData.value = FriendState.FRIEND
+                return@addOnSuccessListener
             } else {
-                isUnknown.value = true
+                friendStateLiveData.value = FriendState.UNKNOWN
+                return@addOnSuccessListener
             }
         }.addOnFailureListener {
             isApiFailed.value = true
@@ -107,7 +111,12 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun acceptFriendRequest(friendUid: String){
         isUploadingLiveData.value = true
         accountRepository.acceptFriendRequest(friendUid) {
-            isUploadingLiveData.value = it
+            isUploadingLiveData.value = false
+            if(it){
+                friendStateLiveData.value = FriendState.FRIEND
+            } else {
+                //Show that something went wrong
+            }
         }
     }
 
@@ -121,7 +130,15 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun addFriend(friendUid: String){
         isUploadingLiveData.value = true
         accountRepository.addFriend(friendUid) {
-            isUploadingLiveData.value = it
+            isUploadingLiveData.value = false
+            if(it){
+                //show that the request got sent
+                friendState(friendUid)
+                //friendStateLiveData.value = FriendState.REQUEST
+            } else {
+                //Something went wrong with the friend request
+                friendStateLiveData.value = FriendState.UNKNOWN
+            }
         }
     }
 
@@ -164,11 +181,11 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     fun getAllFriendRequests(){
         accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
             val account = documentSnapshot.toObject(Account::class.java)
-            val friendRequests = account!!.friendRequests
+            val friendRequests = account!!.friendRequests?.filter { it.state == State.Asked }
             val allFriendRequests = mutableListOf<Account>()
 
-            friendRequests!!.forEach {
-                accountRepository.database().document(it).get().addOnSuccessListener {
+            friendRequests?.forEach {
+                accountRepository.database().document(it.id!!).get().addOnSuccessListener {
                     val friendRequestAccount = it.toObject(Account::class.java)
                     allFriendRequests.add(friendRequestAccount!!)
                     friendRequestLiveData.value = allFriendRequests
@@ -180,4 +197,10 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
             }
     }
 
+}
+
+enum class FriendState{
+    FRIEND,
+    REQUEST,
+    UNKNOWN
 }

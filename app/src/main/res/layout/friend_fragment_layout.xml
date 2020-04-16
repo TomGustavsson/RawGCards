@@ -5,9 +5,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.tomgu.rawgcards.account.ui.FriendState"/>
+        <import type="com.tomgu.rawgcards.account.models.State"/>
+
         <variable
             name="account"
-            type="com.tomgu.rawgcards.account.Account" />
+            type="com.tomgu.rawgcards.account.models.Account" />
         <variable
             name="viewModel"
             type="com.tomgu.rawgcards.account.ui.AccountDialogViewModel" />
@@ -80,7 +83,7 @@
                 android:src="@drawable/ic_action_add"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:visibility="@{viewModel.isUnknown() == true &amp;&amp; viewModel.isUploadingLiveData() == false}" />
+                app:visibility="@{viewModel.getFriendStateLiveData() == FriendState.UNKNOWN &amp;&amp; viewModel.isUploadingLiveData() == false}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -90,12 +93,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/gradient_list_item"
-            android:text="Accept"
+            android:text="@string/accept_friend"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/progressBarFriend"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:visibility="@{viewModel.isRequest() == true &amp;&amp; viewModel.isUploadingLiveData() == false}" />
+            app:visibility="@{viewModel.getFriendStateLiveData() == FriendState.REQUEST &amp;&amp; viewModel.getRequestStateLiveData() == State.Asked &amp;&amp; viewModel.isUploadingLiveData() == false}" />
 
         <Button
             android:id="@+id/declineButton"
@@ -103,12 +106,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/gradient_list_item"
-            android:text="Decline"
+            android:text="@string/decline_friend"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/progressBarFriend"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:visibility="@{viewModel.isRequest() == true &amp;&amp; viewModel.isUploadingLiveData() == false}" />
+            app:visibility="@{viewModel.getFriendStateLiveData() == FriendState.REQUEST &amp;&amp; viewModel.getRequestStateLiveData() == State.Asked &amp;&amp; viewModel.isUploadingLiveData() == false}" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/sharedGamesRecyclerView"
@@ -119,7 +122,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-            app:visibility="@{viewModel.isFriend() == true &amp;&amp; viewModel.isUploadingLiveData() == false}" />
+            app:visibility="@{viewModel.getFriendStateLiveData() == FriendState.FRIEND &amp;&amp; viewModel.isUploadingLiveData() == false}" />
 
         <ProgressBar
             android:id="@+id/progressBarFriend"
@@ -131,6 +134,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
             app:visibility="@{viewModel.isUploadingLiveData() == true}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/custom_wallpoet"
+            android:text="@string/pending_request"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp"
+            app:visibility="@{viewModel.getRequestStateLiveData() == State.Pending &amp;&amp; viewModel.isUploadingLiveData() == false}"
+            app:layout_constraintBottom_toBottomOf="@+id/sharedGamesRecyclerView"
+            app:layout_constraintEnd_toEndOf="@+id/sharedGamesRecyclerView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,7 +19,7 @@ import io.reactivex.Observable
 import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.MyBaseAdapter
-import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.account.models.Account
 import com.tomgu.rawgcards.account.ui.AccountDialogViewModel
 import com.tomgu.rawgcards.account.ui.FriendFragment
 import com.tomgu.rawgcards.api.CompleteGame
@@ -130,7 +129,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
                         viewModel.shareGame(game!!, model.uid!!)
                     } else {
                         dismiss()
-                        val friendFragment = FriendFragment(model)
+                        val friendFragment = FriendFragment.newInstance(model)
                         val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
                         friendFragment.tag
                         fragmentTransaction.replace(R.id.frame_layout, friendFragment)

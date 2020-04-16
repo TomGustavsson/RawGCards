@@ -37,6 +37,7 @@ class AccountFragment : Fragment() {
         binding.viewModel = viewModel
 
         viewModel.getCurrentAccount()
+        viewModel.getAllFriendRequests()
 
 
         viewModel.isApiFailed().observe(viewLifecycleOwner, Observer {

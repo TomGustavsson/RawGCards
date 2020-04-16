@@ -16,4 +16,7 @@
     <string name="label_all">All users</string>
     <string name="label_requests">Your friend requests</string>
     <string name="label_sign_out">Sign out</string>
+    <string name="accept_friend">Accept</string>
+    <string name="decline_friend">Decline</string>
+    <string name="pending_request">Pending your friend request</string>
 </resources>

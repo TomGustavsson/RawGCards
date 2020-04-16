@@ -5,7 +5,7 @@
     <data>
         <variable
             name="account"
-            type="com.tomgu.rawgcards.account.Account" />
+            type="com.tomgu.rawgcards.account.models.Account" />
     </data>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"

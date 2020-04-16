@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
 import com.squareup.picasso.Picasso
+import com.tomgu.rawgcards.account.ui.FriendState
 
 object BindingAdapter {
 
@@ -35,9 +36,9 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("visibility")
     fun bindVisibility(view: View, visibility: Boolean) {
-        if (visibility == true){
+        if (visibility){
             view.visibility = View.VISIBLE
-        } else if (visibility == false){
+        } else if (!visibility){
             view.visibility = View.GONE
         }
     }
@@ -55,8 +56,6 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("clickAllowed")
     fun clickAllowed(view: View, hasRequests: Boolean){
-        if(!hasRequests){
-            view.isClickable = false
-        }
+        view.isClickable = hasRequests
     }
 }

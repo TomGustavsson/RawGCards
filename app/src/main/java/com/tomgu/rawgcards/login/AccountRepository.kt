@@ -10,7 +10,9 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tomgu.rawgcards.account.Account
+import com.tomgu.rawgcards.account.models.Account
+import com.tomgu.rawgcards.account.models.FriendRequest
+import com.tomgu.rawgcards.account.models.State
 import com.tomgu.rawgcards.api.CompleteGame
 
 class AccountRepository {
@@ -72,12 +74,34 @@ class AccountRepository {
     }
 
     fun acceptFriendRequest(friendUid: String, callback : (Boolean) -> Unit) {
+
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
             account?.friends!!.add(friendUid)
-            account.friendRequests!!.remove(friendUid)
+
+            account.friendRequests!!.forEach {
+                if(it.id == friendUid){
+                    account.friendRequests!!.remove(it)
+                }
+            }
             db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
-                callback.invoke(it.isSuccessful)
+
+                db.document(friendUid).get().addOnSuccessListener {
+                    val friendAccount = it.toObject(Account::class.java)
+                    friendAccount?.friends!!.add(auth.currentUser!!.uid)
+
+                    friendAccount.friendRequests!!.forEach {
+                        if(it.id == auth.currentUser!!.uid){
+                            friendAccount.friendRequests!!.remove(it)
+                        }
+                    }
+
+                    db.document(friendUid).set(friendAccount).addOnCompleteListener {
+                        callback.invoke(it.isSuccessful)
+                    }.addOnFailureListener {
+                        callback.invoke(false)
+                    }
+                }
             }.addOnFailureListener {
                 callback.invoke(false)
             }
@@ -87,7 +111,13 @@ class AccountRepository {
     fun declineFriendRequest(friendUid: String, callback: (Boolean) -> Unit){
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
-            account?.friendRequests!!.remove(friendUid)
+           // account?.friendRequests!!.remove(friendUid)
+
+            account?.friendRequests!!.forEach {
+                if(it.id == friendUid){
+                    account.friendRequests!!.remove(it)
+                }
+            }
             db.document(auth.currentUser!!.uid).set(account)
         }
         db.document(friendUid).get().addOnSuccessListener {
@@ -106,12 +136,12 @@ class AccountRepository {
 
         db.document(friendUid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
-            account?.friendRequests!!.add(auth.currentUser!!.uid)
+            account?.friendRequests!!.add(FriendRequest(auth.currentUser!!.uid, State.Asked))
             db.document(friendUid).set(account)
         }
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)
-            account?.friends!!.add(friendUid)
+            account?.friendRequests!!.add(FriendRequest(friendUid, State.Pending))
             db.document(auth.currentUser!!.uid).set(account).addOnCompleteListener {
                 callback.invoke(it.isSuccessful)
             }.addOnFailureListener {
