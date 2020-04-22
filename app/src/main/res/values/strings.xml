@@ -19,4 +19,5 @@
     <string name="accept_friend">Accept</string>
     <string name="decline_friend">Decline</string>
     <string name="pending_request">Pending your friend request</string>
+    <string name="search_label">Search</string>
 </resources>

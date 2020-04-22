@@ -2,9 +2,8 @@ package com.tomgu.rawgcards.gameinfofrag
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,17 +11,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.tomgu.rawgcards.AppViewModelFactory
-import com.tomgu.rawgcards.MyBaseDiffUtil
-import com.tomgu.rawgcards.R
+import com.tomgu.rawgcards.*
 import io.reactivex.Observable
 import com.tomgu.rawgcards.databinding.FriendListItemBinding
 import com.tomgu.rawgcards.di.AppApplication
-import com.tomgu.rawgcards.MyBaseAdapter
 import com.tomgu.rawgcards.account.models.Account
 import com.tomgu.rawgcards.account.ui.AccountDialogViewModel
 import com.tomgu.rawgcards.account.ui.FriendFragment
+import com.tomgu.rawgcards.account.ui.FriendState
 import com.tomgu.rawgcards.api.CompleteGame
+import com.tomgu.rawgcards.databinding.BottomSheetLayoutBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -31,106 +29,103 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
 
     @Inject
-    lateinit var vmFactory : AppViewModelFactory
+    lateinit var vmFactory: AppViewModelFactory
     lateinit var viewModel: AccountDialogViewModel
 
-    lateinit var friendsAdapter: MyBaseAdapter<Account, FriendListItemBinding>
+    lateinit var friendsAdapter: FilterAdapter
     lateinit var bottomSheetRecyclerView: RecyclerView
 
     var game: CompleteGame? = null
-    lateinit var state: String
     lateinit var share: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view: View = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding: BottomSheetLayoutBinding =
+            BottomSheetLayoutBinding.inflate(LayoutInflater.from(context))
 
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
 
-        state = arguments?.getString(STATE_ARGUMENT)!!
         share = arguments?.getString(SHARE_ARGUMENT)!!
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.toolbar.inflateMenu(R.menu.search_menu)
+        binding.toolbar.setOnMenuItemClickListener {
+            onOptionsItemSelected(it)
+        }
 
-        if(share == "SHARE"){
+        if (share == "SHARE") {
             game = (arguments?.getSerializable(GAME_ARGUMENT) as CompleteGame?)!!
         }
-        bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecyclerView)
+        bottomSheetRecyclerView = binding.bottomSheetRecyclerView
+
         initRecyclerView()
 
-        when(state){
-            "FRIENDS"-> {
-                viewModel.getFriends()
-                viewModel.getFriendsLiveData().observe(viewLifecycleOwner, Observer {
-                    Observable.just(it)
-                        .map {
-                            Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            friendsAdapter.listItems = it.first
-                            it.second.dispatchUpdatesTo(friendsAdapter)
+        viewModel.getUsers(arguments?.getSerializable(STATE_ARGUMENT) as FriendState)
+        viewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
+            Observable.just(it)
+                .map {
+                    Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    friendsAdapter.listItems = it.first
+                    friendsAdapter.listItemsFull = it.first as MutableList<Account>
+                    it.second.dispatchUpdatesTo(friendsAdapter)
 
-                        }, {
-                            Log.d("tgiw", it.toString())
-                        })
+                }, {
+                    Log.d("tgiw", it.toString())
                 })
-            }
-            "USERS" -> {
-                viewModel.getAllUsers()
-                viewModel.getUsersLiveData().observe(viewLifecycleOwner, Observer {
-                    Observable.just(it)
-                        .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            friendsAdapter.listItems = it.first
-                            it.second.dispatchUpdatesTo(friendsAdapter)
+        })
 
-                        },{
-                            Log.d("tgiw", it.toString())
-                        })
-                })
-            }
-            "REQUESTS" -> {
-                viewModel.getAllFriendRequests()
-                viewModel.getFriendRequestLiveData().observe(viewLifecycleOwner, Observer {
-                    Observable.just(it)
-                        .map { Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                        }
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            friendsAdapter.listItems = it.first
-                            it.second.dispatchUpdatesTo(friendsAdapter)
-                        }, {
-                            Log.d("tgiw", it.toString())
-                        })
-                })
-
-            }
-
-        }
-
-        return view
+        return binding.root
     }
 
-    private fun initRecyclerView(){
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_search -> {
+                val searchView = item.actionView as androidx.appcompat.widget.SearchView
+
+                searchView.imeOptions = EditorInfo.IME_ACTION_DONE
+
+                searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        friendsAdapter.filter.filter(newText)
+                        return false
+                    }
+
+                })
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun initRecyclerView() {
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(activity)
-        friendsAdapter = object : MyBaseAdapter<Account, FriendListItemBinding>() {
+        friendsAdapter = object : FilterAdapter() {
             override fun getLayoutResId(): Int {
                 return R.layout.friend_list_item
             }
+
             override fun onBindData(model: Account, dataBinding: FriendListItemBinding) {
                 dataBinding.account = model
                 dataBinding.root.setOnClickListener {
-                    if(share == "SHARE"){
+                    if (share == "SHARE") {
                         dismiss()
                         viewModel.shareGame(game!!, model.uid!!)
                     } else {
                         dismiss()
                         val friendFragment = FriendFragment.newInstance(model)
-                        val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                        val fragmentTransaction: FragmentTransaction =
+                            fragmentManager!!.beginTransaction()
                         friendFragment.tag
                         fragmentTransaction.replace(R.id.frame_layout, friendFragment)
                         fragmentTransaction.addToBackStack("FRIEND_FRAGMENT")
@@ -138,6 +133,7 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
                     }
                 }
             }
+
         }
         bottomSheetRecyclerView.adapter = friendsAdapter
     }
@@ -147,11 +143,11 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         private const val STATE_ARGUMENT = "state"
         private const val SHARE_ARGUMENT = "share"
 
-        fun newInstance(game : CompleteGame?, state : String, share : String) : BottomSheetDialog {
+        fun newInstance(game : CompleteGame?, state : FriendState, share : String) : BottomSheetDialog {
             val bottomSheetDialog = BottomSheetDialog()
 
             val arguments = Bundle()
-            arguments.putString(STATE_ARGUMENT, state)
+            arguments.putSerializable(STATE_ARGUMENT, state)
             arguments.putSerializable(GAME_ARGUMENT, game)
             arguments.putString(SHARE_ARGUMENT, share)
 

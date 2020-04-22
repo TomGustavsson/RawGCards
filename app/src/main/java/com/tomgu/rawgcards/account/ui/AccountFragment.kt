@@ -37,7 +37,7 @@ class AccountFragment : Fragment() {
         binding.viewModel = viewModel
 
         viewModel.getCurrentAccount()
-        viewModel.getAllFriendRequests()
+        viewModel.getUsers(FriendState.REQUEST)
 
 
         viewModel.isApiFailed().observe(viewLifecycleOwner, Observer {
@@ -55,12 +55,12 @@ class AccountFragment : Fragment() {
         })
 
         binding.usersFab.setOnClickListener {
-            bottomSheetDialog = BottomSheetDialog.newInstance(null,"USERS", "NOSHARE")
+            bottomSheetDialog = BottomSheetDialog.newInstance(null,FriendState.UNKNOWN, "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
         binding.friendsFab.setOnClickListener {
-            bottomSheetDialog = BottomSheetDialog.newInstance(null,"FRIENDS", "NOSHARE")
+            bottomSheetDialog = BottomSheetDialog.newInstance(null,FriendState.FRIEND, "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
         }
 
@@ -71,7 +71,7 @@ class AccountFragment : Fragment() {
         }
 
         binding.requestsFab.setOnClickListener {
-            bottomSheetDialog = BottomSheetDialog.newInstance(null, "REQUESTS", "NOSHARE")
+            bottomSheetDialog = BottomSheetDialog.newInstance(null, FriendState.REQUEST, "NOSHARE")
             bottomSheetDialog.show(fragmentManager!!, " bottomsheetDialog")
         }
 

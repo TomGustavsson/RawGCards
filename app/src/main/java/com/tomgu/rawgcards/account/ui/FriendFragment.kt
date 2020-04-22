@@ -58,7 +58,6 @@ class FriendFragment: Fragment() {
 
         viewModel.friendState(friend.uid!!)
         viewModel.getFriendStateLiveData().observe(viewLifecycleOwner, Observer {
-            Log.d("TGIW", it.toString())
             if(it == FriendState.FRIEND)
                 setFriendsSharedGames()
         })

@@ -21,6 +21,7 @@ import com.squareup.picasso.Picasso
 import com.tomgu.rawgcards.AppViewModelFactory
 
 import com.tomgu.rawgcards.R
+import com.tomgu.rawgcards.account.ui.FriendState
 import com.tomgu.rawgcards.databinding.FragmentGameInfoBinding
 import com.tomgu.rawgcards.di.AppApplication
 import com.tomgu.rawgcards.api.CompleteGame
@@ -97,7 +98,7 @@ class GameInfoFragment : Fragment() {
                 viewModel.saveSharedGame(state, gameShare)
                 Toast.makeText(context, "GAME SAVED", Toast.LENGTH_LONG).show()
             } else {
-                val bottomSheetDialog = BottomSheetDialog.newInstance(gameShare,"FRIENDS", "SHARE")
+                val bottomSheetDialog = BottomSheetDialog.newInstance(gameShare,FriendState.FRIEND, "SHARE")
                 bottomSheetDialog.show(fragmentManager!!, "bottomsheetDialog")
             }
         }

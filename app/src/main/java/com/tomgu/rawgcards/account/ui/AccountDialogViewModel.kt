@@ -1,6 +1,5 @@
 package com.tomgu.rawgcards.account.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,17 +15,14 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
     @Inject
     lateinit var accountRepository: AccountRepository
 
-    private var friendsLiveData : MutableLiveData<List<Account>> = MutableLiveData()
-    fun getFriendsLiveData(): LiveData<List<Account>> = friendsLiveData
+    private var usersLiveData: MutableLiveData<List<Account>> = MutableLiveData()
+    fun getUserLiveData(): LiveData<List<Account>> = usersLiveData
 
-    private var friendRequestLiveData: MutableLiveData<List<Account>> = MutableLiveData()
-    fun getFriendRequestLiveData(): LiveData<List<Account>> = friendRequestLiveData
+    private var friendRequestLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
+    fun getFriendRequestLiveData(): LiveData<Boolean> = friendRequestLiveData
 
     private var sharedGamesLiveData : MutableLiveData<List<CompleteGame>> = MutableLiveData()
     fun getGamesLiveData(): LiveData<List<CompleteGame>> = sharedGamesLiveData
-
-    private var allUsersLiveData : MutableLiveData<List<Account>> = MutableLiveData()
-    fun getUsersLiveData(): LiveData<List<Account>> = allUsersLiveData
 
     private var currentAccountLiveData: MutableLiveData<Account> = MutableLiveData()
     fun getCurrentAccountLiveData(): LiveData<Account> = currentAccountLiveData
@@ -53,25 +49,6 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
             val account = documentSnapshot.toObject(Account::class.java)
             currentAccountLiveData.value = account
-        }
-    }
-
-    fun getFriends() {
-
-        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
-            val account = documentSnapshot.toObject(Account::class.java)
-            val friends = account!!.friends
-            val allFriends = mutableListOf<Account>()
-
-            friends!!.forEach {
-                accountRepository.database().document(it).get().addOnSuccessListener {
-                    val friendAccount = it.toObject(Account::class.java)
-                    allFriends.add(friendAccount!!)
-                    friendsLiveData.value = allFriends
-                }
-            }
-        } . addOnFailureListener {
-            isApiFailed.value = true
         }
     }
 
@@ -132,9 +109,7 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         accountRepository.addFriend(friendUid) {
             isUploadingLiveData.value = false
             if(it){
-                //show that the request got sent
                 friendState(friendUid)
-                //friendStateLiveData.value = FriendState.REQUEST
             } else {
                 //Something went wrong with the friend request
                 friendStateLiveData.value = FriendState.UNKNOWN
@@ -156,45 +131,67 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
             }
     }
 
-    fun getAllUsers(){
+    fun getUsers(state : FriendState){
+        when(state){
+            FriendState.FRIEND -> {
 
-        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
-           val currentUser = it.toObject(Account::class.java)!!
+                accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
+                    val account = documentSnapshot.toObject(Account::class.java)
+                    val friends = account!!.friends
+                    val allFriends = mutableListOf<Account>()
 
-            accountRepository.database().get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val allUsers = mutableListOf<Account>()
-                    documentSnapshot.forEach {
-                        val account = it.toObject(Account::class.java)
-                        if (account != currentUser)
-                            allUsers.add(account)
-                        allUsersLiveData.value = allUsers
+                    friends!!.forEach {
+                        accountRepository.database().document(it).get().addOnSuccessListener {
+                            val friendAccount = it.toObject(Account::class.java)
+                            allFriends.add(friendAccount!!)
+                            usersLiveData.value = allFriends
+                        }
                     }
-                }
-                .addOnFailureListener {
+                } . addOnFailureListener {
                     isApiFailed.value = true
                 }
-        }
+            }
+            FriendState.UNKNOWN -> {
+                accountRepository.retrieveCurrentAccount().get().addOnSuccessListener {
+                    val currentUser = it.toObject(Account::class.java)!!
 
-    }
-
-    fun getAllFriendRequests(){
-        accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
-            val account = documentSnapshot.toObject(Account::class.java)
-            val friendRequests = account!!.friendRequests?.filter { it.state == State.Asked }
-            val allFriendRequests = mutableListOf<Account>()
-
-            friendRequests?.forEach {
-                accountRepository.database().document(it.id!!).get().addOnSuccessListener {
-                    val friendRequestAccount = it.toObject(Account::class.java)
-                    allFriendRequests.add(friendRequestAccount!!)
-                    friendRequestLiveData.value = allFriendRequests
+                    accountRepository.database().get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val allUsers = mutableListOf<Account>()
+                            documentSnapshot.forEach {
+                                val account = it.toObject(Account::class.java)
+                                if (account != currentUser)
+                                    allUsers.add(account)
+                                usersLiveData.value = allUsers
+                            }
+                        }
+                        .addOnFailureListener {
+                            isApiFailed.value = true
+                        }
                 }
             }
-        }
-            .addOnFailureListener {
-                isApiFailed.value = true
+            FriendState.REQUEST -> {
+
+                accountRepository.retrieveCurrentAccount().get().addOnSuccessListener { documentSnapshot ->
+                    val account = documentSnapshot.toObject(Account::class.java)
+                    val friendRequests = account!!.friendRequests?.filter { it.state == State.Asked }
+                    val allFriendRequests = mutableListOf<Account>()
+
+                    friendRequests?.forEach {
+                        accountRepository.database().document(it.id!!).get().addOnSuccessListener {
+                            val friendRequestAccount = it.toObject(Account::class.java)
+                            allFriendRequests.add(friendRequestAccount!!)
+                            usersLiveData.value = allFriendRequests
+                            friendRequestLiveData.value = true
+
+                        }
+                    }
+                }
+                    .addOnFailureListener {
+                        isApiFailed.value = true
+                    }
             }
+        }
     }
 
 }

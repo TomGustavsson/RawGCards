@@ -145,7 +145,7 @@
         <LinearLayout
             android:background="@drawable/underline_layout"
             android:id="@+id/requestsLinear"
-            app:hasRequests="@{viewModel.getFriendRequestLiveData() != null}"
+            app:hasRequests="@{viewModel.getFriendRequestLiveData() != false}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -154,7 +154,7 @@
                 android:src="@drawable/ic_contact_mail_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:clickAllowed="@{viewModel.getFriendRequestLiveData() != null}"
+                app:clickAllowed="@{viewModel.getFriendRequestLiveData() != false}"
                 app:useCompatPadding="true" />
 
             <TextView
@@ -170,7 +170,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_priority_high_black_24dp"
                 android:layout_gravity="center"
-                app:visibility="@{viewModel.getFriendRequestLiveData() != null}"/>
+                app:visibility="@{viewModel.getFriendRequestLiveData() != false}"/>
 
         </LinearLayout>
 
