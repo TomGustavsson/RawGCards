@@ -117,6 +117,10 @@ class AccountDialogViewModel: ViewModel(), AppComponent.Injectable {
         }
     }
 
+    fun deleteSharedGame(gameId : String, friendUid: String){
+        accountRepository.deleteSharedGame(gameId,friendUid)
+    }
+
     fun getSharedGames(friendUid: String){
         accountRepository.retrieveSharedGames().document(friendUid).collection("SharedGames").get()
             .addOnSuccessListener {

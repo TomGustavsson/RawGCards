@@ -49,6 +49,8 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
         (activity?.applicationContext as AppApplication).appComponent().inject(this)
         viewModel = ViewModelProviders.of(this, vmFactory)[AccountDialogViewModel::class.java]
 
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         share = arguments?.getString(SHARE_ARGUMENT)!!
         binding.lifecycleOwner = viewLifecycleOwner
         binding.toolbar.inflateMenu(R.menu.search_menu)
@@ -65,20 +67,9 @@ class BottomSheetDialog : BottomSheetDialogFragment() {
 
         viewModel.getUsers(arguments?.getSerializable(STATE_ARGUMENT) as FriendState)
         viewModel.getUserLiveData().observe(viewLifecycleOwner, Observer {
-            Observable.just(it)
-                .map {
-                    Pair(it, DiffUtil.calculateDiff(MyBaseDiffUtil(friendsAdapter.listItems, it)))
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    friendsAdapter.listItems = it.first
-                    friendsAdapter.listItemsFull = it.first as MutableList<Account>
-                    it.second.dispatchUpdatesTo(friendsAdapter)
-
-                }, {
-                    Log.d("tgiw", it.toString())
-                })
+            friendsAdapter.listItems = it
+            friendsAdapter.listItemsFull = it as MutableList<Account>
+            friendsAdapter.notifyDataSetChanged()
         })
 
         return binding.root

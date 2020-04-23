@@ -108,6 +108,11 @@ class AccountRepository {
         }
     }
 
+    fun deleteSharedGame(gameId: String, friendUid: String){
+        db.document(auth.currentUser!!.uid).collection("Friends").document(friendUid).collection("SharedGames")
+            .document(gameId).delete()
+    }
+
     fun declineFriendRequest(friendUid: String, callback: (Boolean) -> Unit){
         db.document(auth.currentUser!!.uid).get().addOnSuccessListener {
             val account = it.toObject(Account::class.java)

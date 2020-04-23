@@ -20,4 +20,5 @@
     <string name="decline_friend">Decline</string>
     <string name="pending_request">Pending your friend request</string>
     <string name="search_label">Search</string>
+    <string name="list_header">Friends shared games</string>
 </resources>

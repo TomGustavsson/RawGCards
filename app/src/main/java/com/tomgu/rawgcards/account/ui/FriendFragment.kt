@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomgu.rawgcards.AppViewModelFactory
@@ -101,7 +102,18 @@ class FriendFragment: Fragment() {
                 }
             }
         }
+        ItemTouchHelper(itemTouchHelper).attachToRecyclerView(recyclerView)
         recyclerView.adapter = adapter
+    }
+
+    val itemTouchHelper = object :  ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            return false
+        }
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val game = adapter.listItems.get(viewHolder.adapterPosition)
+            viewModel.deleteSharedGame(game.slug, friend.uid!!)
+        }
 
     }
 

@@ -100,7 +100,7 @@ class GameListFragment : Fragment() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            var game = recyclerAdapter.listItems.get(viewHolder.adapterPosition)
+            val game = recyclerAdapter.listItems.get(viewHolder.adapterPosition)
             viewModel.deleteGame(game)
         }
     }
